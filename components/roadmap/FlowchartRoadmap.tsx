@@ -213,8 +213,8 @@ export const FlowchartRoadmap: React.FC = () => {
                 </span>
               </div>
 
-              {/* Connected Transit Station Node Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+              {/* Connected Transit Station Node Cards with Rich Line Colors */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4.5 pt-1">
                 {milestone.lessons.map((lesson) => {
                   const isDone = completedLessonIds.includes(lesson.id);
                   const isRecommended = lesson.id === nextRecommendedLesson.id;
@@ -222,54 +222,68 @@ export const FlowchartRoadmap: React.FC = () => {
                   return (
                     <motion.div
                       key={lesson.id}
-                      whileHover={{ scale: 1.02, y: -3 }}
+                      whileHover={{ scale: 1.025, y: -3 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setSelectedDrawerLesson(lesson)}
-                      className="group p-5 rounded-[24px] border text-left flex flex-col justify-between min-h-[140px] transition-all duration-200 cursor-pointer relative overflow-hidden"
+                      className="group p-5 sm:p-6 rounded-[26px] border text-left flex flex-col justify-between min-h-[160px] transition-all duration-200 cursor-pointer relative overflow-hidden"
                       style={{
                         background: isRecommended
-                          ? 'linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(255, 255, 255, 0.04) 100%)'
+                          ? 'linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(255, 255, 255, 0.04) 100%)'
                           : isDone
-                          ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(255, 255, 255, 0.03) 100%)'
-                          : 'linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%)',
-                        backdropFilter: 'blur(20px)',
+                          ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(255, 255, 255, 0.03) 100%)'
+                          : `linear-gradient(135deg, ${milestone.lineColor}18 0%, rgba(255, 255, 255, 0.02) 100%)`,
+                        backdropFilter: 'blur(28px) saturate(200%)',
                         borderColor: isRecommended
                           ? '#fbbf24'
                           : isDone
-                          ? 'rgba(16, 185, 129, 0.4)'
-                          : 'rgba(255, 255, 255, 0.12)',
+                          ? 'rgba(16, 185, 129, 0.5)'
+                          : `${milestone.lineColor}45`,
                         boxShadow: isRecommended
-                          ? '0 15px 35px rgba(251, 191, 36, 0.25), inset 0 1px 1.5px rgba(255, 255, 255, 0.4)'
+                          ? '0 15px 40px rgba(251, 191, 36, 0.3), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.4)'
                           : isDone
-                          ? '0 10px 25px rgba(16, 185, 129, 0.15), inset 0 1px 1.5px rgba(255, 255, 255, 0.3)'
-                          : '0 8px 20px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
+                          ? '0 12px 30px rgba(16, 185, 129, 0.2), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.35)'
+                          : `0 12px 30px rgba(0, 0, 0, 0.4), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.35)`,
                       }}
                     >
+                      {/* Ambient background glow orb */}
+                      <div
+                        className="absolute -top-10 -right-10 w-28 h-28 rounded-full blur-2xl pointer-events-none opacity-30 group-hover:opacity-75 transition-opacity duration-300"
+                        style={{ backgroundColor: isRecommended ? '#fbbf24' : isDone ? '#10b981' : milestone.lineColor }}
+                      />
+
                       {/* Top status line */}
-                      <div className="flex items-center justify-between w-full">
-                        <span className="text-[11px] font-mono font-bold text-slate-300">
+                      <div className="flex items-center justify-between w-full relative z-10">
+                        <span
+                          className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-md"
+                          style={{
+                            backgroundColor: `${milestone.lineColor}20`,
+                            color: milestone.lineColor,
+                            border: `1px solid ${milestone.lineColor}40`,
+                          }}
+                        >
                           Station {lesson.title.split('.')[0]}
                         </span>
 
                         {isDone ? (
-                          <span className="flex items-center gap-1 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">
+                          <span className="flex items-center gap-1 text-[10px] font-mono font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 shadow-sm">
                             <CheckCircle2 size={11} />
                             <span>CLEARED</span>
                           </span>
                         ) : isRecommended ? (
-                          <span className="flex items-center gap-1 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/50 animate-pulse">
+                          <span className="flex items-center gap-1 text-[10px] font-mono font-bold px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/50 animate-pulse shadow-sm">
+                            <Sparkles size={11} />
                             <span>NEXT STOP</span>
                           </span>
                         ) : (
-                          <span className="text-[10px] font-mono text-slate-400">
+                          <span className="text-[10px] font-mono text-slate-400 bg-black/40 px-2.5 py-0.5 rounded-md border border-white/10">
                             {lesson.difficulty}
                           </span>
                         )}
                       </div>
 
                       {/* Title & Description in Plain English */}
-                      <div className="space-y-1 my-2">
-                        <h4 className="font-bold text-sm text-white font-sans tracking-tight group-hover:text-sky-300 transition">
+                      <div className="space-y-1.5 my-2.5 relative z-10">
+                        <h4 className="font-extrabold text-sm sm:text-base text-white font-sans tracking-tight group-hover:text-white transition">
                           {lesson.title.replace(/^\d+\.\s*/, '')}
                         </h4>
                         <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed font-sans">
@@ -278,13 +292,13 @@ export const FlowchartRoadmap: React.FC = () => {
                       </div>
 
                       {/* Bottom action row */}
-                      <div className="flex items-center justify-between pt-2 border-t border-white/5 text-[11px] font-sans">
+                      <div className="flex items-center justify-between pt-3 border-t border-white/10 text-[11px] font-sans relative z-10">
                         <span
-                          className="font-bold flex items-center gap-1"
-                          style={{ color: 'var(--branch-main)' }}
+                          className="font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform"
+                          style={{ color: milestone.lineColor }}
                         >
                           <span>Explore Concept</span>
-                          <ArrowRight size={12} className="group-hover:translate-x-1 transition" />
+                          <ArrowRight size={13} />
                         </span>
 
                         <button
@@ -292,10 +306,17 @@ export const FlowchartRoadmap: React.FC = () => {
                             e.stopPropagation();
                             handleLaunchLesson(lesson.id);
                           }}
-                          className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-white/10 hover:bg-white/20 text-slate-100 transition flex items-center gap-1 cursor-pointer"
+                          className="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95"
+                          style={{
+                            background: isRecommended
+                              ? 'linear-gradient(180deg, #fbbf24 0%, #d97706 100%)'
+                              : 'linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                            color: isRecommended ? '#090d16' : '#ffffff',
+                            border: '1px solid rgba(255, 255, 255, 0.2)',
+                          }}
                         >
-                          <Play size={10} />
-                          <span>Practice</span>
+                          <Play size={11} fill={isRecommended ? '#090d16' : '#ffffff'} />
+                          <span>Board</span>
                         </button>
                       </div>
                     </motion.div>
