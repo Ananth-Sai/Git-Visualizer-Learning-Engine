@@ -64,14 +64,28 @@ export const AnimationScrubber: React.FC<AnimationScrubberProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
-      className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl p-4 rounded-2xl glass-panel-elevated shadow-2xl border border-sky-500/20 z-40"
+      className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-2xl p-5 rounded-[28px] shadow-2xl z-40 text-slate-100"
+      style={{
+        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 100%)',
+        backdropFilter: 'blur(36px) saturate(200%)',
+        WebkitBackdropFilter: 'blur(36px) saturate(200%)',
+        border: '1px solid rgba(255, 255, 255, 0.28)',
+        boxShadow: '0 25px 70px rgba(0, 0, 0, 0.6), inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.5), inset 0 -1.5px 1.5px 0 rgba(0, 0, 0, 0.2)',
+      }}
     >
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider bg-sky-500/20 text-sky-300 border border-sky-400/30">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2.5">
+          <span
+            className="px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider shadow-sm"
+            style={{
+              background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(56, 189, 248, 0.1) 100%)',
+              color: '#38bdf8',
+              border: '1px solid rgba(56, 189, 248, 0.4)',
+            }}
+          >
             {operationType} Scrubber
           </span>
-          <span className="text-xs font-medium text-slate-300">
+          <span className="text-xs font-semibold text-white">
             Step {currentStep} of {totalSteps}
           </span>
         </div>
@@ -79,35 +93,51 @@ export const AnimationScrubber: React.FC<AnimationScrubberProps> = ({
         {onCancel && (
           <button
             onClick={onCancel}
-            className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-white/5 transition"
+            className="p-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition cursor-pointer"
             aria-label="Close scrubber"
           >
-            <X size={14} />
+            <X size={15} />
           </button>
         )}
       </div>
 
       {/* Plain-English Current Step */}
-      <div className="py-1.5 px-3 rounded-lg bg-slate-950/60 border border-white/5 font-sans text-xs text-sky-200 mb-3">
+      <div
+        className="py-2.5 px-4 rounded-2xl font-sans text-xs text-white mb-3.5 leading-relaxed font-medium"
+        style={{
+          background: 'rgba(0, 0, 0, 0.4)',
+          border: '1px solid rgba(255, 255, 255, 0.12)',
+          boxShadow: 'inset 0 1px 1.5px rgba(0, 0, 0, 0.5)',
+        }}
+      >
         {steps[currentStep - 1]}
       </div>
 
       {/* Progress Track */}
-      <div className="relative w-full h-1.5 bg-slate-800 rounded-full mb-3 overflow-hidden">
+      <div className="relative w-full h-2 bg-black/50 rounded-full mb-3.5 overflow-hidden border border-white/15">
         <motion.div
-          className="h-full bg-gradient-to-r from-sky-400 to-purple-400 rounded-full"
+          className="h-full rounded-full"
+          style={{
+            background: 'linear-gradient(90deg, #38bdf8 0%, #a855f7 100%)',
+            boxShadow: '0 0 12px rgba(56, 189, 248, 0.6)',
+          }}
           animate={{ width: `${(currentStep / totalSteps) * 100}%` }}
           transition={{ duration: 0.3 }}
         />
       </div>
 
-      {/* Playback Controls */}
-      <div className="flex items-center justify-between text-xs">
-        <div className="flex items-center gap-1.5">
+      {/* Tactile Skeuomorphic Playback Controls */}
+      <div className="flex items-center justify-between text-xs pt-1">
+        <div className="flex items-center gap-2">
           <button
             onClick={() => setCurrentStep((prev) => Math.max(1, prev - 1))}
             disabled={currentStep <= 1}
-            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-200"
+            className="p-2.5 rounded-xl transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed hover:brightness-110 active:scale-95 text-white"
+            style={{
+              background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.4)',
+            }}
             title="Step Back"
           >
             <SkipBack size={14} />
@@ -115,16 +145,27 @@ export const AnimationScrubber: React.FC<AnimationScrubberProps> = ({
 
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-500 text-slate-950 font-semibold hover:bg-sky-400 transition"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl font-bold transition-all duration-150 cursor-pointer shadow-lg hover:brightness-110 active:scale-95"
+            style={{
+              background: 'linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%)',
+              color: '#090d16',
+              border: '1px solid rgba(255, 255, 255, 0.9)',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 1)',
+            }}
           >
-            {isPlaying ? <Pause size={14} /> : <Play size={14} />}
+            {isPlaying ? <Pause size={14} /> : <Play size={14} fill="#090d16" />}
             <span>{isPlaying ? 'Pause' : 'Play Simulation'}</span>
           </button>
 
           <button
             onClick={() => setCurrentStep((prev) => Math.min(totalSteps, prev + 1))}
             disabled={currentStep >= totalSteps}
-            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-200"
+            className="p-2.5 rounded-xl transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed hover:brightness-110 active:scale-95 text-white"
+            style={{
+              background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.4)',
+            }}
             title="Step Forward"
           >
             <SkipForward size={14} />
@@ -135,14 +176,19 @@ export const AnimationScrubber: React.FC<AnimationScrubberProps> = ({
               setCurrentStep(1);
               setIsPlaying(true);
             }}
-            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition text-slate-200"
+            className="p-2.5 rounded-xl transition cursor-pointer hover:brightness-110 active:scale-95 text-white"
+            style={{
+              background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.4)',
+            }}
             title="Restart"
           >
             <RotateCcw size={14} />
           </button>
         </div>
 
-        <div className="text-[11px] text-slate-400 font-mono">
+        <div className="text-[11px] text-slate-300 font-mono">
           {currentStep === totalSteps ? '✅ Complete' : 'Scrub or step to inspect'}
         </div>
       </div>

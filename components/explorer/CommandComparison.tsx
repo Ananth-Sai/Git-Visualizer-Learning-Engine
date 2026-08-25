@@ -65,25 +65,42 @@ export const CommandComparison: React.FC = () => {
   const activeComp = COMPARISONS.find((c) => c.id === selectedId) || COMPARISONS[0];
 
   return (
-    <div className="p-5 rounded-2xl glass-panel-elevated shadow-2xl border border-white/5 space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <ArrowLeftRight className="text-sky-400" size={18} />
-          <h2 className="font-bold text-sm text-slate-100 font-sans">
-            Side-by-Side Command Comparisons
-          </h2>
+    <div
+      className="p-7 rounded-[32px] shadow-2xl space-y-6 text-slate-100 relative overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(2, 6, 23, 0.95) 100%)',
+        border: '1px solid rgba(56, 189, 248, 0.25)',
+        boxShadow: '0 25px 70px rgba(0, 0, 0, 0.6), inset 0 1px 1.5px rgba(56, 189, 248, 0.3)',
+      }}
+    >
+      {/* HUD Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-sky-500/20 border border-sky-400/40 flex items-center justify-center shadow-lg shadow-sky-500/20">
+            <ArrowLeftRight className="text-sky-300" size={20} />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-sky-400 px-2 py-0.5 rounded bg-sky-500/10 border border-sky-400/30">
+                TELEMETRY MATRIX
+              </span>
+            </div>
+            <h2 className="font-extrabold text-lg text-white font-sans tracking-tight mt-0.5">
+              Side-by-Side Command Comparer
+            </h2>
+          </div>
         </div>
 
-        {/* Tab Selector */}
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-950/60 border border-white/5">
+        {/* HUD Tab Selector */}
+        <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-black/60 border border-white/15">
           {COMPARISONS.map((comp) => (
             <button
               key={comp.id}
               onClick={() => setSelectedId(comp.id)}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold transition ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all duration-150 cursor-pointer ${
                 selectedId === comp.id
-                  ? 'bg-sky-500 text-slate-950'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-sky-400 text-slate-950 shadow-md'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
             >
               {comp.title.split(' vs ')[0]} vs {comp.title.split(' vs ')[1]}
@@ -92,62 +109,82 @@ export const CommandComparison: React.FC = () => {
         </div>
       </div>
 
-      {/* Comparison Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-        {/* Left Side */}
-        <div className="p-4 rounded-xl bg-slate-950/60 border border-sky-500/20 space-y-3">
-          <div className="flex items-center justify-between pb-2 border-b border-sky-500/20">
-            <span className="font-bold text-sky-300 font-sans text-sm">{activeComp.leftTitle}</span>
-            <span className="font-mono text-[11px] px-2 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-500/30">
+      {/* Side-by-Side Comparison HUD Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+        {/* Left Side (Cyan Terminal HUD) */}
+        <div
+          className="p-6 rounded-[24px] space-y-4 relative overflow-hidden"
+          style={{
+            background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%)',
+            border: '1px solid rgba(6, 182, 212, 0.35)',
+            boxShadow: '0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(6, 182, 212, 0.3)',
+          }}
+        >
+          <div className="flex items-center justify-between pb-3 border-b border-cyan-500/20">
+            <span className="font-bold text-cyan-300 font-sans text-sm tracking-tight">{activeComp.leftTitle}</span>
+            <code className="px-2.5 py-1 rounded-lg bg-cyan-950/80 text-cyan-300 border border-cyan-400/40 font-mono font-bold text-[11px]">
               {activeComp.leftCmd}
-            </span>
+            </code>
           </div>
-
-          <p className="text-slate-300 leading-relaxed">{activeComp.leftDesc}</p>
-
-          <div className="space-y-1.5 pt-2">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-              Strengths:
+          <p className="text-slate-300 leading-relaxed font-sans text-xs">{activeComp.leftDesc}</p>
+          <div className="space-y-2 pt-2 border-t border-cyan-500/10">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-400 block">
+              Key Mechanics:
             </span>
-            {activeComp.leftPros.map((pro, idx) => (
-              <div key={idx} className="flex items-center gap-2 text-slate-300">
-                <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
-                <span>{pro}</span>
-              </div>
-            ))}
+            <ul className="space-y-1.5 font-sans">
+              {activeComp.leftPros.map((pro, i) => (
+                <li key={i} className="flex items-center gap-2 text-slate-200">
+                  <CheckCircle2 size={13} className="text-cyan-400 shrink-0" />
+                  <span>{pro}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        {/* Right Side */}
-        <div className="p-4 rounded-xl bg-slate-950/60 border border-purple-500/20 space-y-3">
-          <div className="flex items-center justify-between pb-2 border-b border-purple-500/20">
-            <span className="font-bold text-purple-300 font-sans text-sm">{activeComp.rightTitle}</span>
-            <span className="font-mono text-[11px] px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/30">
+        {/* Right Side (Purple / Amber Terminal HUD) */}
+        <div
+          className="p-6 rounded-[24px] space-y-4 relative overflow-hidden"
+          style={{
+            background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%)',
+            border: '1px solid rgba(168, 85, 247, 0.35)',
+            boxShadow: '0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(168, 85, 247, 0.3)',
+          }}
+        >
+          <div className="flex items-center justify-between pb-3 border-b border-purple-500/20">
+            <span className="font-bold text-purple-300 font-sans text-sm tracking-tight">{activeComp.rightTitle}</span>
+            <code className="px-2.5 py-1 rounded-lg bg-purple-950/80 text-purple-300 border border-purple-400/40 font-mono font-bold text-[11px]">
               {activeComp.rightCmd}
-            </span>
+            </code>
           </div>
-
-          <p className="text-slate-300 leading-relaxed">{activeComp.rightDesc}</p>
-
-          <div className="space-y-1.5 pt-2">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-              Strengths:
+          <p className="text-slate-300 leading-relaxed font-sans text-xs">{activeComp.rightDesc}</p>
+          <div className="space-y-2 pt-2 border-t border-purple-500/10">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-purple-400 block">
+              Key Mechanics:
             </span>
-            {activeComp.rightPros.map((pro, idx) => (
-              <div key={idx} className="flex items-center gap-2 text-slate-300">
-                <CheckCircle2 size={13} className="text-purple-400 shrink-0" />
-                <span>{pro}</span>
-              </div>
-            ))}
+            <ul className="space-y-1.5 font-sans">
+              {activeComp.rightPros.map((pro, i) => (
+                <li key={i} className="flex items-center gap-2 text-slate-200">
+                  <CheckCircle2 size={13} className="text-purple-400 shrink-0" />
+                  <span>{pro}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
 
-      {/* Pro Recommendation Box */}
-      <div className="p-3 rounded-xl bg-slate-950/80 border border-amber-500/20 text-xs flex items-start gap-2.5">
-        <AlertCircle size={16} className="text-amber-400 shrink-0 mt-0.5" />
-        <div className="text-slate-300 leading-relaxed">
-          <span className="font-bold text-amber-300">When to use which: </span>
+      {/* Pro Recommendation HUD Banner */}
+      <div
+        className="p-4 rounded-2xl flex items-center gap-3.5"
+        style={{
+          background: 'rgba(251, 191, 36, 0.1)',
+          border: '1px solid rgba(251, 191, 36, 0.35)',
+        }}
+      >
+        <AlertCircle size={18} className="text-amber-400 shrink-0" />
+        <div className="text-xs font-sans text-slate-200 leading-relaxed">
+          <span className="font-bold text-amber-300 mr-1.5 font-mono text-[11px] uppercase">Industry Protocol:</span>
           {activeComp.recommendation}
         </div>
       </div>
