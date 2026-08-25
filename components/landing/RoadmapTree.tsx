@@ -151,66 +151,71 @@ export const RoadmapTree: React.FC = () => {
                 </span>
               </div>
 
-              {/* Symmetrical 3-Column Liquid Glass Cards Grid with Rich Color Harmonies */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4.5 pt-1">
+              {/* Symmetrical 3-Column Liquid Glass Cards Grid with True Image 2 Bento Styling */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-1">
                 {stage.lessons.map((lesson) => {
                   const isDone = completedLessonIds.includes(lesson.id);
                   return (
                     <motion.button
                       key={lesson.id}
-                      whileHover={{ scale: 1.025, y: -3 }}
+                      whileHover={{ scale: 1.02, y: -4 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setSelectedDrawerLesson(lesson)}
-                      className="p-5 rounded-[24px] text-left flex flex-col justify-between min-h-[150px] transition-all duration-200 cursor-pointer relative overflow-hidden group"
+                      className="p-6 rounded-[28px] text-left flex flex-col justify-between min-h-[200px] transition-all duration-200 cursor-pointer relative overflow-hidden group"
                       style={{
                         background: isDone
-                          ? `linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(255, 255, 255, 0.03) 100%)`
-                          : `linear-gradient(135deg, ${stage.color}14 0%, rgba(255, 255, 255, 0.02) 100%)`,
-                        backdropFilter: 'blur(24px) saturate(190%)',
-                        WebkitBackdropFilter: 'blur(24px) saturate(190%)',
-                        border: isDone ? '1px solid rgba(16, 185, 129, 0.45)' : `1px solid ${stage.color}35`,
+                          ? `linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(255, 255, 255, 0.03) 100%)`
+                          : `linear-gradient(135deg, ${stage.color}18 0%, rgba(255, 255, 255, 0.02) 100%)`,
+                        backdropFilter: 'blur(30px) saturate(200%)',
+                        WebkitBackdropFilter: 'blur(30px) saturate(200%)',
+                        border: isDone ? '1px solid rgba(16, 185, 129, 0.5)' : `1px solid ${stage.color}45`,
                         boxShadow: isDone
-                          ? '0 12px 30px rgba(0, 0, 0, 0.4), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.4)'
-                          : `0 10px 25px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.35)`,
+                          ? '0 20px 45px rgba(0, 0, 0, 0.5), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.4)'
+                          : `0 20px 45px rgba(0, 0, 0, 0.5), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.35)`,
                       }}
                     >
-                      {/* Ambient colored background glow orb on hover */}
+                      {/* Ambient background glow orb */}
                       <div
-                        className="absolute -top-10 -right-10 w-28 h-28 rounded-full blur-2xl pointer-events-none opacity-30 group-hover:opacity-70 transition-opacity duration-300"
+                        className="absolute -top-12 -right-12 w-32 h-32 rounded-full blur-3xl pointer-events-none opacity-40 group-hover:opacity-80 transition-opacity duration-300"
                         style={{ backgroundColor: stage.color }}
                       />
 
-                      {/* Top status line */}
-                      <div className="flex items-center justify-between w-full relative z-10">
-                        <span
-                          className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-md"
+                      {/* Header Row: Icon Squircle + Tag */}
+                      <div className="flex items-center justify-between w-full relative z-10 mb-3">
+                        <div
+                          className="w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg transition-transform duration-200 group-hover:scale-105 group-hover:-rotate-2"
                           style={{
-                            backgroundColor: `${stage.color}18`,
+                            backgroundColor: `${stage.color}25`,
                             color: stage.color,
-                            border: `1px solid ${stage.color}30`,
+                            border: `1px solid ${stage.color}50`,
+                            boxShadow: `0 4px 14px ${stage.color}25, inset 0 1px 1px rgba(255,255,255,0.4)`,
                           }}
                         >
-                          Level {lesson.title.split('.')[0]}
-                        </span>
+                          <Icon size={19} />
+                        </div>
 
                         {isDone ? (
-                          <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-emerald-300 bg-emerald-500/20 px-2.5 py-0.5 rounded-full border border-emerald-500/40 shadow-sm">
+                          <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-emerald-300 bg-emerald-500/20 px-3 py-1 rounded-full border border-emerald-500/50 shadow-sm">
                             <CheckCircle2 size={11} />
                             <span>CLEARED</span>
                           </span>
                         ) : (
-                          <span className="text-[10px] font-mono text-slate-400 bg-black/40 px-2 py-0.5 rounded-md border border-white/10">
-                            {lesson.difficulty}
+                          <span
+                            className="text-[10px] font-mono font-bold px-3 py-1 rounded-full border uppercase tracking-wider"
+                            style={{
+                              backgroundColor: `${stage.color}15`,
+                              color: stage.color,
+                              borderColor: `${stage.color}35`,
+                            }}
+                          >
+                            Level {lesson.title.split('.')[0]}
                           </span>
                         )}
                       </div>
 
                       {/* Title & Description */}
-                      <div className="my-2 relative z-10">
-                        <h5
-                          className="font-extrabold text-sm text-white line-clamp-1 mb-1 font-sans tracking-tight transition-colors"
-                          style={{ color: '#ffffff' }}
-                        >
+                      <div className="space-y-1.5 relative z-10 my-1">
+                        <h5 className="font-extrabold text-base text-white line-clamp-1 font-sans tracking-tight group-hover:text-white transition-colors">
                           {lesson.title.replace(/^\d+\.\s*/, '')}
                         </h5>
                         <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed font-sans">
@@ -218,13 +223,18 @@ export const RoadmapTree: React.FC = () => {
                         </p>
                       </div>
 
-                      {/* Bottom link with stage color accent */}
-                      <div
-                        className="flex items-center gap-1 text-[11px] font-bold pt-1 transition-all relative z-10"
-                        style={{ color: stage.color }}
-                      >
-                        <span>Explore Concept</span>
-                        <ChevronRight size={13} className="group-hover:translate-x-1 transition-transform" />
+                      {/* Footer Row (Like Image 2) */}
+                      <div className="pt-4 mt-2 border-t border-white/10 flex items-center justify-between font-mono text-[11px] relative z-10 w-full">
+                        <span className="text-slate-400 font-sans text-xs flex items-center gap-1.5">
+                          <span>{lesson.difficulty}</span>
+                        </span>
+                        <span
+                          className="font-bold flex items-center gap-1 group-hover:translate-x-1 transition-transform"
+                          style={{ color: stage.color }}
+                        >
+                          <span>Explore Concept</span>
+                          <ChevronRight size={13} />
+                        </span>
                       </div>
                     </motion.button>
                   );
