@@ -711,9 +711,9 @@ export default function CurriculumPage() {
                     </ul>
                   </div>
 
-                  {/* Terms Decoder */}
+                  {/* Terms Decoder (Color-Matched to Visual Canvas Nodes) */}
                   <div
-                    className="p-3.5 rounded-xl space-y-2 text-xs"
+                    className="p-3.5 rounded-xl space-y-2.5 text-xs"
                     style={{
                       background: 'rgba(255, 255, 255, 0.02)',
                       border: '1px solid rgba(255, 255, 255, 0.08)',
@@ -721,17 +721,35 @@ export default function CurriculumPage() {
                   >
                     <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-slate-300 font-mono">
                       <Sparkles size={13} className="text-purple-400" />
-                      <span>Core Terms</span>
+                      <span>Visual Canvas Legend</span>
                     </span>
-                    <div className="space-y-1.5 text-slate-300 font-sans leading-relaxed text-xs">
-                      <div>
-                        <strong className="text-slate-100 font-semibold">HEAD:</strong> The camera lens showing your active snapshot view.
+                    <div className="space-y-2 text-slate-300 font-sans leading-relaxed text-xs">
+                      <div className="flex items-start gap-2">
+                        <span className="shrink-0 mt-0.5 inline-flex items-center px-2 py-0.5 rounded-full font-mono text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/60 shadow-sm">
+                          HEAD
+                        </span>
+                        <span className="text-slate-300">
+                          The camera lens showing your active snapshot view.
+                        </span>
                       </div>
-                      <div>
-                        <strong className="text-slate-100 font-semibold">Snapshot ID:</strong> Unique cryptographic fingerprint for each save point.
+
+                      <div className="flex items-start gap-2">
+                        <span className="shrink-0 mt-0.5 inline-flex items-center px-2 py-0.5 rounded-full font-mono text-[10px] font-bold bg-slate-200 text-slate-950 border border-white shadow-sm">
+                          4d4a
+                        </span>
+                        <span className="text-slate-300">
+                          <strong className="text-slate-100 font-semibold">Snapshot ID:</strong> Unique cryptographic fingerprint for each save point.
+                        </span>
                       </div>
-                      <div>
-                        <strong className="text-slate-100 font-semibold">Branch (main):</strong> A movable label attached to the latest commit.
+
+                      <div className="flex items-start gap-2">
+                        <span className="shrink-0 mt-0.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-mono text-[10px] font-bold bg-white/10 text-white border border-white/40 shadow-sm">
+                          <span>🌿</span>
+                          <span>main</span>
+                        </span>
+                        <span className="text-slate-300">
+                          <strong className="text-slate-100 font-semibold">Branch:</strong> A movable label attached to the latest commit.
+                        </span>
                       </div>
                     </div>
                   </div>
