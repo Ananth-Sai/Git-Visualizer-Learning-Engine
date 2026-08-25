@@ -448,13 +448,11 @@ export default function CurriculumPage() {
                       animate={{ scale: 1, y: 0 }}
                       exit={{ scale: 0.92, y: 15 }}
                       transition={{ type: 'spring', damping: 26, stiffness: 280 }}
-                      className="w-full max-w-lg p-6 sm:p-7 rounded-2xl space-y-4 border my-auto text-slate-100 shadow-2xl"
+                      className="w-full max-w-xl p-6 sm:p-7 rounded-2xl space-y-4 border my-auto text-slate-100 shadow-2xl"
                       style={{
-                        background: 'rgba(15, 23, 42, 0.92)',
-                        backdropFilter: 'blur(28px)',
-                        WebkitBackdropFilter: 'blur(28px)',
-                        border: '1px solid rgba(255, 255, 255, 0.12)',
-                        boxShadow: '0 25px 60px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
+                        background: '#131418',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        boxShadow: '0 30px 80px rgba(0, 0, 0, 0.9), inset 0 1px 1px rgba(255, 255, 255, 0.1)',
                       }}
                     >
                       {/* Header */}
@@ -491,7 +489,7 @@ export default function CurriculumPage() {
                       <div className="space-y-2.5 text-xs">
                         {/* 1. What Just Happened */}
                         <div
-                          className="p-3 rounded-xl space-y-1"
+                          className="p-3.5 rounded-xl space-y-1"
                           style={{
                             background: 'rgba(255, 255, 255, 0.02)',
                             border: '1px solid rgba(255, 255, 255, 0.08)',
@@ -509,7 +507,7 @@ export default function CurriculumPage() {
                         {/* 2. Syntax Breakdown */}
                         {currentLesson.recommendedCommands && currentLesson.recommendedCommands.length > 0 && (
                           <div
-                            className="p-3 rounded-xl space-y-1.5"
+                            className="p-3.5 rounded-xl space-y-2"
                             style={{
                               background: 'rgba(255, 255, 255, 0.02)',
                               border: '1px solid rgba(255, 255, 255, 0.08)',
@@ -518,13 +516,13 @@ export default function CurriculumPage() {
                             <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-slate-400 font-mono">
                               <span>2. Syntax Anatomy</span>
                             </span>
-                            <div className="text-slate-300 text-xs font-mono leading-relaxed space-y-1">
+                            <div className="text-slate-300 text-xs font-mono leading-relaxed space-y-2">
                               {currentLesson.recommendedCommands.map((c) => (
-                                <div key={c} className="flex items-center gap-2">
-                                  <code className="px-1.5 py-0.5 rounded bg-sky-950/60 text-sky-300 border border-sky-500/30 font-bold text-[11px]">
+                                <div key={c} className="flex items-center gap-2.5">
+                                  <code className="px-2.5 py-1 rounded-lg bg-sky-950/70 text-sky-300 border border-sky-500/30 font-bold text-[11px] whitespace-nowrap shrink-0 font-mono shadow-sm">
                                     git {c}
                                   </code>
-                                  <span className="text-xs text-slate-300 font-sans font-normal">
+                                  <span className="text-xs text-slate-300 font-sans font-normal leading-relaxed">
                                     {c === 'init'
                                       ? 'Initializes the hidden local repository database (.git) in this folder.'
                                       : c.includes('commit')
