@@ -20,6 +20,8 @@ import {
   Activity,
   Target,
   Lightbulb,
+  GitBranch,
+  ShieldAlert,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useRouter } from 'next/navigation';
@@ -243,6 +245,25 @@ export default function CurriculumPage() {
                 const stageIndex = stageLessons.findIndex((l) => l.id === currentLesson.id) + 1;
                 const stageProgressPct = Math.round((stageIndex / stageLessons.length) * 100);
 
+                // Hybrid 1 & 2: Stage-Adaptive Colors on Neutral Obsidian Base
+                const stageColor =
+                  currentLesson.tier === 1
+                    ? '#38bdf8'
+                    : currentLesson.tier === 2
+                    ? '#c084fc'
+                    : currentLesson.tier === 3
+                    ? '#fbbf24'
+                    : '#fb7185';
+
+                const StageIcon =
+                  currentLesson.tier === 1
+                    ? Sparkles
+                    : currentLesson.tier === 2
+                    ? GitBranch
+                    : currentLesson.tier === 3
+                    ? Layers
+                    : ShieldAlert;
+
                 return (
                   <motion.div
                     initial={{ opacity: 0 }}
@@ -255,23 +276,37 @@ export default function CurriculumPage() {
                       animate={{ scale: 1, y: 0 }}
                       exit={{ scale: 0.92, y: 15 }}
                       transition={{ type: 'spring', damping: 26, stiffness: 280 }}
-                      className="w-full max-w-lg p-6 sm:p-7 rounded-2xl space-y-4 border my-auto text-slate-100 shadow-2xl"
+                      className="w-full max-w-lg p-6 sm:p-7 rounded-2xl space-y-4 border my-auto text-slate-100 shadow-2xl relative overflow-hidden"
                       style={{
-                        background: '#16181d',
-                        border: '1px solid rgba(255, 255, 255, 0.12)',
+                        background: '#131418',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
                         boxShadow: '0 30px 80px rgba(0, 0, 0, 0.9), inset 0 1px 1px rgba(255, 255, 255, 0.1)',
                       }}
                     >
-                      {/* Header (Clean Monochrome + Emerald Progress) */}
-                      <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                      {/* Ambient corner glow adapted to stage */}
+                      <div
+                        className="absolute -top-12 -right-12 w-36 h-36 rounded-full blur-3xl pointer-events-none opacity-25"
+                        style={{ backgroundColor: stageColor }}
+                      />
+
+                      {/* Header */}
+                      <div className="flex items-center justify-between border-b border-white/10 pb-4 relative z-10">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/15 flex items-center justify-center text-slate-100 font-bold text-base shadow-sm shrink-0 font-mono">
-                            {currentIndex + 1}
+                          <div
+                            className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-base shadow-sm shrink-0"
+                            style={{
+                              backgroundColor: `${stageColor}18`,
+                              color: stageColor,
+                              border: `1px solid ${stageColor}40`,
+                              boxShadow: `0 4px 12px ${stageColor}20`,
+                            }}
+                          >
+                            <StageIcon size={18} />
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
                               <h3 className="font-bold text-base text-white font-sans tracking-tight">
-                                {currentLesson.title.replace(/^\d+\.\s*/, '')}
+                                Level {currentIndex + 1}: {currentLesson.title.replace(/^\d+\.\s*/, '')}
                               </h3>
                             </div>
                             <p className="text-xs text-slate-400 font-sans">
@@ -282,28 +317,42 @@ export default function CurriculumPage() {
 
                         {/* Progress Badge */}
                         <div className="flex flex-col items-end gap-1 font-mono">
-                          <span className="text-[11px] text-slate-300 bg-white/5 px-2.5 py-0.5 rounded-md border border-white/10 font-medium">
+                          <span
+                            className="text-[11px] px-2.5 py-0.5 rounded-md border font-medium"
+                            style={{
+                              backgroundColor: `${stageColor}12`,
+                              color: stageColor,
+                              borderColor: `${stageColor}30`,
+                            }}
+                          >
                             {stageIndex} / {stageLessons.length} Complete
                           </span>
                           <div className="w-24 h-1 rounded-full bg-white/10 overflow-hidden">
                             <div
-                              className="h-full rounded-full transition-all duration-500 bg-emerald-400"
-                              style={{ width: `${stageProgressPct}%` }}
+                              className="h-full rounded-full transition-all duration-500"
+                              style={{ width: `${stageProgressPct}%`, backgroundColor: stageColor }}
                             />
                           </div>
                         </div>
                       </div>
 
-                      {/* Structured Info Cards (Non-Blank Developer Docs Style) */}
-                      <div className="space-y-3 text-xs">
-                        {/* 1. Core Mission & Target Command */}
-                        <div className="p-3.5 rounded-xl bg-white/[0.025] border border-white/10 space-y-2">
+                      {/* Multi-Color Functional Cards */}
+                      <div className="space-y-3 text-xs relative z-10">
+                        {/* 1. Target Concept & Syntax Command Chip */}
+                        <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
                           <div className="flex items-center justify-between">
                             <span className="font-mono text-[10px] text-slate-400 uppercase tracking-wider font-semibold">
-                              Target Concept & Command
+                              What You&apos;ll Learn
                             </span>
                             {currentLesson.recommendedCommands && currentLesson.recommendedCommands.length > 0 && (
-                              <code className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-mono text-[11px] font-bold">
+                              <code
+                                className="px-2 py-0.5 rounded font-mono text-[11px] font-bold border"
+                                style={{
+                                  backgroundColor: `${stageColor}15`,
+                                  color: stageColor,
+                                  borderColor: `${stageColor}35`,
+                                }}
+                              >
                                 git {currentLesson.recommendedCommands[0]}
                               </code>
                             )}
@@ -313,15 +362,30 @@ export default function CurriculumPage() {
                           </p>
                         </div>
 
-                        {/* 2. Your Practice Goal (High Contrast Emerald Focus) */}
-                        <div className="p-3.5 rounded-xl bg-emerald-500/[0.04] border border-emerald-500/30 space-y-1.5 shadow-sm">
+                        {/* 2. Your Practice Goal (Adaptive Stage Highlight Card) */}
+                        <div
+                          className="p-3.5 rounded-xl space-y-1.5 shadow-sm"
+                          style={{
+                            background: `${stageColor}10`,
+                            border: `1px solid ${stageColor}45`,
+                          }}
+                        >
                           <div className="flex items-center justify-between">
-                            <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-emerald-400 font-mono">
+                            <span
+                              className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 font-mono"
+                              style={{ color: stageColor }}
+                            >
                               <Target size={13} />
-                              <span>Practice Goal</span>
+                              <span>Your Practice Goal</span>
                             </span>
-                            <span className="text-[10px] font-mono text-emerald-300/80 bg-emerald-500/10 px-2 py-0.5 rounded">
-                              Required
+                            <span
+                              className="text-[10px] font-mono px-2 py-0.5 rounded font-medium"
+                              style={{
+                                backgroundColor: `${stageColor}20`,
+                                color: stageColor,
+                              }}
+                            >
+                              Action Required
                             </span>
                           </div>
                           <p className="text-white font-medium font-sans text-xs leading-relaxed">
@@ -329,14 +393,20 @@ export default function CurriculumPage() {
                           </p>
                         </div>
 
-                        {/* 3. Real-World Context (Clean Key Takeaway) */}
+                        {/* 3. Real-World Context (Soft Violet / Purple Card) */}
                         {currentLesson.realWorldContext && (
-                          <div className="p-3.5 rounded-xl bg-white/[0.025] border border-white/10 space-y-1">
-                            <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-slate-300 font-mono">
-                              <Building2 size={13} className="text-slate-400" />
-                              <span>Industry Takeaway</span>
+                          <div
+                            className="p-3.5 rounded-xl space-y-1"
+                            style={{
+                              background: 'rgba(168, 85, 247, 0.04)',
+                              border: '1px solid rgba(168, 85, 247, 0.2)',
+                            }}
+                          >
+                            <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-purple-300 font-mono">
+                              <Building2 size={13} className="text-purple-400" />
+                              <span>Why Teams Use This</span>
                             </span>
-                            <p className="text-slate-400 text-xs leading-relaxed font-sans font-normal">
+                            <p className="text-slate-300 text-xs leading-relaxed font-sans font-normal">
                               {currentLesson.realWorldContext}
                             </p>
                           </div>
@@ -344,7 +414,7 @@ export default function CurriculumPage() {
                       </div>
 
                       {/* Action Button */}
-                      <div className="pt-2 border-t border-white/10">
+                      <div className="pt-2 border-t border-white/10 relative z-10">
                         <button
                           onClick={() => setShowBriefingModal(false)}
                           className="w-full py-3 px-6 rounded-xl font-semibold text-xs tracking-wide transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:brightness-105 active:scale-[0.98] bg-white text-slate-950 hover:bg-slate-100"
