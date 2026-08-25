@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+:root,
+[data-theme="linear"],
+[data-theme="cyberpunk"],
+[data-theme="midnight"] {
+  --bg-base: #0e1015;
+  --bg-surface: #161820;
+  --bg-surface-elevated: #1f232e;
+  --text-primary: #e2e8f0;
+  --text-muted: #8492a6;
+  --branch-main: #60a5fa;
+  --branch-feat: #94a3b8;
+  --node-border: #2d3748;
+  --accent-warm: #f59e0b;
+  --accent-success: #10b981;
+  --accent-danger: #f87171;
+  --glow-beacon: rgba(96, 165, 250, 0.25);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="github"] {
+  --bg-base: #1c2128;
+  --bg-surface: #22272e;
+  --bg-surface-elevated: #2d333b;
+  --text-primary: #adbac7;
+  --text-muted: #768390;
+  --branch-main: #539bf5;
+  --branch-feat: #768390;
+  --node-border: #373e47;
+  --accent-warm: #daaa3f;
+  --accent-success: #57ab5a;
+  --accent-danger: #e5534b;
+  --glow-beacon: rgba(83, 155, 245, 0.25);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="jetbrains"] {
+  --bg-base: #1e1f22;
+  --bg-surface: #2b2d30;
+  --bg-surface-elevated: #393b40;
+  --text-primary: #dfe1e5;
+  --text-muted: #868a91;
+  --branch-main: #56a8f5;
+  --branch-feat: #a8b0bd;
+  --node-border: #43454a;
+  --accent-warm: #e5a84b;
+  --accent-success: #62b543;
+  --accent-danger: #e05555;
+  --glow-beacon: rgba(86, 168, 245, 0.25);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="espresso"] {
+  --bg-base: #161413;
+  --bg-surface: #1e1b19;
+  --bg-surface-elevated: #2a2623;
+  --text-primary: #e6ded8;
+  --text-muted: #a3978f;
+  --branch-main: #e07a5f;
+  --branch-feat: #d4a373;
+  --node-border: #3d3733;
+  --accent-warm: #f2cc8f;
+  --accent-success: #81b29a;
+  --accent-danger: #e76f51;
+  --glow-beacon: rgba(224, 122, 95, 0.25);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="sage"] {
+  --bg-base: #111513;
+  --bg-surface: #181f1b;
+  --bg-surface-elevated: #222b25;
+  --text-primary: #dce4de;
+  --text-muted: #8b9c90;
+  --branch-main: #52b788;
+  --branch-feat: #8fbc8f;
+  --node-border: #2e3b33;
+  --accent-warm: #ddb892;
+  --accent-success: #52b788;
+  --accent-danger: #e57373;
+  --glow-beacon: rgba(82, 183, 136, 0.25);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="monochrome"] {
+  --bg-base: #0f0f11;
+  --bg-surface: #18181b;
+  --bg-surface-elevated: #27272a;
+  --text-primary: #f4f4f5;
+  --text-muted: #a1a1aa;
+  --branch-main: #e4e4e7;
+  --branch-feat: #a1a1aa;
+  --node-border: #3f3f46;
+  --accent-warm: #fbbf24;
+  --accent-success: #34d399;
+  --accent-danger: #f87171;
+  --glow-beacon: rgba(244, 244, 245, 0.25);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Custom sleek low-fatigue scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--node-border);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Matte Low-Fatigue Glass Panels */
+.glass-panel {
+  background: color-mix(in srgb, var(--bg-surface) 95%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+}
+
+.glass-panel-elevated {
+  background: color-mix(in srgb, var(--bg-surface-elevated) 95%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.1));
+}
+
+/* Subtle, Muted HEAD beacon pulse */
+@keyframes beacon-pulse {
+  0% {
+    transform: scale(0.97);
+    box-shadow: 0 0 0 0 var(--glow-beacon);
+  }
+  70% {
+    transform: scale(1.04);
+    box-shadow: 0 0 0 8px rgba(0, 0, 0, 0);
+  }
+  100% {
+    transform: scale(0.97);
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+.animate-head-beacon {
+  animation: beacon-pulse 2.5s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+/* Subtle spline line */
+.spline-glow {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+}
