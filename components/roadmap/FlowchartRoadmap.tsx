@@ -119,7 +119,7 @@ export const FlowchartRoadmap: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
             <button
               onClick={() => handleLaunchLesson(nextRecommendedLesson.id)}
-              className="px-7 py-3.5 rounded-2xl font-black text-xs transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-xl hover:brightness-110 active:scale-[0.98]"
+              className="px-7 py-3.5 rounded-2xl font-bold text-sm tracking-[0.02em] transition-all duration-150 flex items-center justify-center gap-3 cursor-pointer shadow-xl hover:brightness-105 active:scale-[0.98] group"
               style={{
                 background: 'linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%)',
                 color: '#090d16',
@@ -127,11 +127,11 @@ export const FlowchartRoadmap: React.FC = () => {
                 boxShadow: '0 10px 30px rgba(0, 0, 0, 0.4), inset 0 2px 2px rgba(255, 255, 255, 1)',
               }}
             >
-              <Play size={15} fill="#090d16" />
+              <Play size={14} fill="#090d16" />
               <span>
                 {progressCount === 0 ? 'Depart Station (Level 1)' : 'Board Level ' + (nextIndex + 1)}
               </span>
-              <ArrowRight size={14} />
+              <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
         </div>
