@@ -293,7 +293,7 @@ export default function CurriculumPage() {
                       <div className="flex items-center justify-between border-b border-white/10 pb-4 relative z-10">
                         <div className="flex items-center gap-3">
                           <div
-                            className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-base shadow-sm shrink-0"
+                            className="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-lg shadow-sm shrink-0"
                             style={{
                               backgroundColor: `${stageColor}18`,
                               color: stageColor,
@@ -301,24 +301,24 @@ export default function CurriculumPage() {
                               boxShadow: `0 4px 12px ${stageColor}20`,
                             }}
                           >
-                            <StageIcon size={18} />
+                            <StageIcon size={20} />
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
-                              <h3 className="font-bold text-base text-white font-sans tracking-tight">
+                              <h3 className="font-bold text-lg text-white font-sans tracking-tight">
                                 Level {currentIndex + 1}: {currentLesson.title.replace(/^\d+\.\s*/, '')}
                               </h3>
                             </div>
-                            <p className="text-xs text-slate-400 font-sans">
+                            <p className="text-sm text-slate-400 font-sans">
                               {currentLesson.tierTitle} · Stage {currentLesson.tier}
                             </p>
                           </div>
                         </div>
 
                         {/* Progress Badge */}
-                        <div className="flex flex-col items-end gap-1 font-mono">
+                        <div className="flex flex-col items-end gap-1.5 font-mono">
                           <span
-                            className="text-[11px] px-2.5 py-0.5 rounded-md border font-medium"
+                            className="text-xs px-3 py-1 rounded-md border font-medium"
                             style={{
                               backgroundColor: `${stageColor}12`,
                               color: stageColor,
@@ -327,7 +327,7 @@ export default function CurriculumPage() {
                           >
                             {stageIndex} / {stageLessons.length} Complete
                           </span>
-                          <div className="w-24 h-1 rounded-full bg-white/10 overflow-hidden">
+                          <div className="w-28 h-1.5 rounded-full bg-white/10 overflow-hidden">
                             <div
                               className="h-full rounded-full transition-all duration-500"
                               style={{ width: `${stageProgressPct}%`, backgroundColor: stageColor }}
@@ -337,16 +337,16 @@ export default function CurriculumPage() {
                       </div>
 
                       {/* Multi-Color Functional Cards */}
-                      <div className="space-y-3 text-xs relative z-10">
+                      <div className="space-y-3 relative z-10">
                         {/* 1. Target Concept & Syntax Command Chip */}
-                        <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
+                        <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-2">
                           <div className="flex items-center justify-between">
-                            <span className="font-mono text-[10px] text-slate-400 uppercase tracking-wider font-semibold">
+                            <span className="font-mono text-xs text-slate-400 uppercase tracking-wider font-semibold">
                               What You&apos;ll Learn
                             </span>
                             {currentLesson.recommendedCommands && currentLesson.recommendedCommands.length > 0 && (
                               <code
-                                className="px-2 py-0.5 rounded font-mono text-[11px] font-bold border"
+                                className="px-2.5 py-1 rounded font-mono text-xs font-bold border"
                                 style={{
                                   backgroundColor: `${stageColor}15`,
                                   color: stageColor,
@@ -357,14 +357,14 @@ export default function CurriculumPage() {
                               </code>
                             )}
                           </div>
-                          <p className="text-slate-300 text-xs leading-relaxed font-sans font-normal">
+                          <p className="text-slate-200 text-[13.5px] leading-relaxed font-sans font-normal">
                             {currentLesson.description}
                           </p>
                         </div>
 
                         {/* 2. Your Practice Goal (Adaptive Stage Highlight Card) */}
                         <div
-                          className="p-3.5 rounded-xl space-y-1.5 shadow-sm"
+                          className="p-4 rounded-xl space-y-2 shadow-sm"
                           style={{
                             background: `${stageColor}10`,
                             border: `1px solid ${stageColor}45`,
@@ -372,14 +372,14 @@ export default function CurriculumPage() {
                         >
                           <div className="flex items-center justify-between">
                             <span
-                              className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 font-mono"
+                              className="font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 font-mono"
                               style={{ color: stageColor }}
                             >
-                              <Target size={13} />
+                              <Target size={14} />
                               <span>Your Practice Goal</span>
                             </span>
                             <span
-                              className="text-[10px] font-mono px-2 py-0.5 rounded font-medium"
+                              className="text-xs font-mono px-2.5 py-0.5 rounded font-medium"
                               style={{
                                 backgroundColor: `${stageColor}20`,
                                 color: stageColor,
@@ -388,7 +388,7 @@ export default function CurriculumPage() {
                               Action Required
                             </span>
                           </div>
-                          <p className="text-white font-medium font-sans text-xs leading-relaxed">
+                          <p className="text-white font-medium font-sans text-sm leading-relaxed">
                             {currentLesson.expectedGoalText}
                           </p>
                         </div>
@@ -396,17 +396,17 @@ export default function CurriculumPage() {
                         {/* 3. Real-World Context (Soft Violet / Purple Card) */}
                         {currentLesson.realWorldContext && (
                           <div
-                            className="p-3.5 rounded-xl space-y-1"
+                            className="p-4 rounded-xl space-y-1.5"
                             style={{
                               background: 'rgba(168, 85, 247, 0.04)',
                               border: '1px solid rgba(168, 85, 247, 0.2)',
                             }}
                           >
-                            <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-purple-300 font-mono">
-                              <Building2 size={13} className="text-purple-400" />
+                            <span className="font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 text-purple-300 font-mono">
+                              <Building2 size={14} className="text-purple-400" />
                               <span>Why Teams Use This</span>
                             </span>
-                            <p className="text-slate-300 text-xs leading-relaxed font-sans font-normal">
+                            <p className="text-slate-300 text-[13.5px] leading-relaxed font-sans font-normal">
                               {currentLesson.realWorldContext}
                             </p>
                           </div>
@@ -417,10 +417,10 @@ export default function CurriculumPage() {
                       <div className="pt-2 border-t border-white/10 relative z-10">
                         <button
                           onClick={() => setShowBriefingModal(false)}
-                          className="w-full py-3 px-6 rounded-xl font-semibold text-xs tracking-wide transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:brightness-105 active:scale-[0.98] bg-white text-slate-950 hover:bg-slate-100"
+                          className="w-full py-3.5 px-6 rounded-xl font-semibold text-sm tracking-wide transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:brightness-105 active:scale-[0.98] bg-white text-slate-950 hover:bg-slate-100"
                         >
                           <span>Start Level {currentIndex + 1} Challenge</span>
-                          <ArrowRight size={14} />
+                          <ArrowRight size={16} />
                         </button>
                       </div>
                     </motion.div>
@@ -441,7 +441,7 @@ export default function CurriculumPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 select-none overflow-y-auto"
+                    className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4 select-none overflow-y-auto"
                   >
                     <motion.div
                       initial={{ scale: 0.92, y: 15 }}
@@ -458,25 +458,25 @@ export default function CurriculumPage() {
                       {/* Header */}
                       <div className="flex items-center justify-between border-b border-white/10 pb-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-base shadow-sm shrink-0">
+                          <div className="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-lg shadow-sm shrink-0">
                             ✓
                           </div>
                           <div>
-                            <h3 className="font-semibold text-base text-white font-sans tracking-tight">
+                            <h3 className="font-bold text-lg text-white font-sans tracking-tight">
                               Level {currentIndex + 1} Mastered!
                             </h3>
-                            <p className="text-xs text-slate-400 font-sans">
+                            <p className="text-sm text-slate-400 font-sans">
                               {currentLesson.title.replace(/^\d+\.\s*/, '')}
                             </p>
                           </div>
                         </div>
 
                         {/* Stage Progress Pill */}
-                        <div className="flex flex-col items-end gap-1">
-                          <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-md border border-emerald-500/20">
+                        <div className="flex flex-col items-end gap-1.5">
+                          <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-md border border-emerald-500/20 font-medium">
                             {currentLesson.tierTitle} ({stageIndex}/{stageLessons.length})
                           </span>
-                          <div className="w-24 h-1 rounded-full bg-white/10 overflow-hidden">
+                          <div className="w-28 h-1.5 rounded-full bg-white/10 overflow-hidden">
                             <div
                               className="h-full rounded-full transition-all duration-500 bg-emerald-400"
                               style={{ width: `${stageProgressPct}%` }}
@@ -486,20 +486,20 @@ export default function CurriculumPage() {
                       </div>
 
                       {/* Learning Cards (Matte Satin) */}
-                      <div className="space-y-2.5 text-xs">
+                      <div className="space-y-3">
                         {/* 1. What Just Happened */}
                         <div
-                          className="p-3.5 rounded-xl space-y-1"
+                          className="p-4 rounded-xl space-y-1.5"
                           style={{
                             background: 'rgba(255, 255, 255, 0.02)',
                             border: '1px solid rgba(255, 255, 255, 0.08)',
                           }}
                         >
-                          <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-sky-400 font-mono">
-                            <Sparkles size={12} />
+                          <span className="font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 text-sky-400 font-mono">
+                            <Sparkles size={13} />
                             <span>1. What Just Happened</span>
                           </span>
-                          <p className="text-slate-300 text-xs leading-relaxed font-sans font-normal">
+                          <p className="text-slate-200 text-[13.5px] leading-relaxed font-sans font-normal">
                             {currentLesson.pedagogicalTip || currentLesson.description}
                           </p>
                         </div>
@@ -507,22 +507,22 @@ export default function CurriculumPage() {
                         {/* 2. Syntax Breakdown */}
                         {currentLesson.recommendedCommands && currentLesson.recommendedCommands.length > 0 && (
                           <div
-                            className="p-3.5 rounded-xl space-y-2"
+                            className="p-4 rounded-xl space-y-2.5"
                             style={{
                               background: 'rgba(255, 255, 255, 0.02)',
                               border: '1px solid rgba(255, 255, 255, 0.08)',
                             }}
                           >
-                            <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-slate-400 font-mono">
+                            <span className="font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 text-slate-400 font-mono">
                               <span>2. Syntax Anatomy</span>
                             </span>
                             <div className="text-slate-300 text-xs font-mono leading-relaxed space-y-2">
                               {currentLesson.recommendedCommands.map((c) => (
-                                <div key={c} className="flex items-center gap-2.5">
-                                  <code className="px-2.5 py-1 rounded-lg bg-sky-950/70 text-sky-300 border border-sky-500/30 font-bold text-[11px] whitespace-nowrap shrink-0 font-mono shadow-sm">
+                                <div key={c} className="flex items-center gap-3">
+                                  <code className="px-2.5 py-1 rounded-lg bg-sky-950/70 text-sky-300 border border-sky-500/30 font-bold text-xs whitespace-nowrap shrink-0 font-mono shadow-sm">
                                     git {c}
                                   </code>
-                                  <span className="text-xs text-slate-300 font-sans font-normal leading-relaxed">
+                                  <span className="text-[13.5px] text-slate-200 font-sans font-normal leading-relaxed">
                                     {c === 'init'
                                       ? 'Initializes the hidden local repository database (.git) in this folder.'
                                       : c.includes('commit')
@@ -540,17 +540,17 @@ export default function CurriculumPage() {
                         {/* 3. Pro Tip & Gotcha Defense */}
                         {currentLesson.commonGotcha && (
                           <div
-                            className="p-3 rounded-xl space-y-1"
+                            className="p-4 rounded-xl space-y-1.5"
                             style={{
                               background: 'rgba(245, 158, 11, 0.04)',
                               border: '1px solid rgba(245, 158, 11, 0.25)',
                             }}
                           >
-                            <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-amber-400 font-mono">
-                              <AlertTriangle size={12} />
+                            <span className="font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 text-amber-400 font-mono">
+                              <AlertTriangle size={13} />
                               <span>3. Watch Out For (Gotcha)</span>
                             </span>
-                            <p className="text-slate-300 text-xs leading-relaxed font-sans font-normal">
+                            <p className="text-slate-300 text-[13.5px] leading-relaxed font-sans font-normal">
                               {currentLesson.commonGotcha}
                             </p>
                           </div>
@@ -559,17 +559,17 @@ export default function CurriculumPage() {
                         {/* 4. Why Teams Use This */}
                         {currentLesson.realWorldContext && (
                           <div
-                            className="p-3 rounded-xl space-y-1"
+                            className="p-4 rounded-xl space-y-1.5"
                             style={{
                               background: 'rgba(255, 255, 255, 0.02)',
                               border: '1px solid rgba(255, 255, 255, 0.08)',
                             }}
                           >
-                            <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-slate-400 font-mono">
-                              <Building2 size={12} className="text-indigo-400" />
+                            <span className="font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 text-purple-300 font-mono">
+                              <Building2 size={13} className="text-purple-400" />
                               <span>4. Why Teams Use This</span>
                             </span>
-                            <p className="text-slate-300 text-xs leading-relaxed font-sans font-normal">
+                            <p className="text-slate-300 text-[13.5px] leading-relaxed font-sans font-normal">
                               {currentLesson.realWorldContext}
                             </p>
                           </div>
@@ -577,30 +577,30 @@ export default function CurriculumPage() {
                       </div>
 
                       {/* Footer: Next Level Preview & CTA */}
-                      <div className="pt-2 border-t border-white/10 space-y-2">
+                      <div className="pt-2 border-t border-white/10 space-y-2.5">
                         {nextLesson ? (
                           <>
-                            <div className="flex items-center justify-between text-[11px] text-slate-400 font-sans px-1">
+                            <div className="flex items-center justify-between text-xs text-slate-400 font-sans px-1">
                               <span>Up Next:</span>
-                              <span className="font-medium text-slate-200">
+                              <span className="font-semibold text-slate-200">
                                 Level {currentIndex + 2}: {nextLesson.title.replace(/^\d+\.\s*/, '')}
                               </span>
                             </div>
                             <button
                               onClick={handleNext}
-                              className="w-full py-3 px-4 rounded-xl font-semibold text-xs transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:brightness-110 active:scale-[0.98] bg-sky-400 text-slate-950"
+                              className="w-full py-3.5 px-4 rounded-xl font-semibold text-sm transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:brightness-110 active:scale-[0.98] bg-sky-400 text-slate-950"
                             >
                               <span>Continue to Next Level</span>
-                              <ArrowRight size={14} />
+                              <ArrowRight size={16} />
                             </button>
                           </>
                         ) : (
                           <button
                             onClick={() => router.push('/playground')}
-                            className="w-full py-3 px-4 rounded-xl font-semibold text-xs transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:brightness-110 active:scale-[0.98] bg-emerald-400 text-slate-950"
+                            className="w-full py-3.5 px-4 rounded-xl font-semibold text-sm transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:brightness-110 active:scale-[0.98] bg-emerald-400 text-slate-950"
                           >
                             <span>🏆 All {LESSONS.length} Levels Mastered! Open Sandbox</span>
-                            <ArrowRight size={14} />
+                            <ArrowRight size={16} />
                           </button>
                         )}
                       </div>
