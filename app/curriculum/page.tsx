@@ -248,111 +248,90 @@ export default function CurriculumPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-50 bg-black/15 backdrop-blur-2xl backdrop-saturate-200 flex items-center justify-center p-4 select-none overflow-y-auto"
+                    className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 select-none overflow-y-auto"
                   >
                     <motion.div
-                      initial={{ scale: 0.88, y: 20 }}
+                      initial={{ scale: 0.92, y: 15 }}
                       animate={{ scale: 1, y: 0 }}
-                      exit={{ scale: 0.88, y: 20 }}
-                      transition={{ type: 'spring', damping: 25, stiffness: 320 }}
-                      className="w-full max-w-xl p-7 rounded-[32px] space-y-4 border my-auto text-slate-100"
+                      exit={{ scale: 0.92, y: 15 }}
+                      transition={{ type: 'spring', damping: 26, stiffness: 280 }}
+                      className="w-full max-w-lg p-6 sm:p-7 rounded-2xl space-y-4 border my-auto text-slate-100 shadow-2xl"
                       style={{
-                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 100%)',
-                        backdropFilter: 'blur(40px) saturate(220%)',
-                        WebkitBackdropFilter: 'blur(40px) saturate(220%)',
-                        border: '1px solid rgba(255, 255, 255, 0.28)',
-                        boxShadow: '0 30px 90px rgba(0, 0, 0, 0.65), inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.6), inset 0 -1.5px 1.5px 0 rgba(0, 0, 0, 0.25)',
+                        background: 'rgba(15, 23, 42, 0.92)',
+                        backdropFilter: 'blur(28px)',
+                        WebkitBackdropFilter: 'blur(28px)',
+                        border: '1px solid rgba(255, 255, 255, 0.12)',
+                        boxShadow: '0 25px 60px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
                       }}
                     >
                       {/* Header */}
-                      <div className="flex items-center justify-between border-b border-white/15 pb-4">
+                      <div className="flex items-center justify-between border-b border-white/10 pb-4">
                         <div className="flex items-center gap-3">
                           <div
-                            className="w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg shrink-0"
+                            className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-base shadow-sm shrink-0"
                             style={{
-                              backgroundColor: 'var(--branch-main)',
-                              color: 'var(--bg-base)',
-                              boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.6), 0 4px 14px rgba(0,0,0,0.3)',
+                              backgroundColor: 'rgba(56, 189, 248, 0.15)',
+                              color: '#38bdf8',
+                              border: '1px solid rgba(56, 189, 248, 0.3)',
                             }}
                           >
-                            🚀
+                            <Sparkles size={18} />
                           </div>
                           <div>
-                            <h3 className="font-bold text-base text-white font-sans tracking-tight drop-shadow-sm">
+                            <h3 className="font-semibold text-base text-white font-sans tracking-tight">
                               Level {currentIndex + 1} Mission Briefing
                             </h3>
-                            <p className="text-xs text-slate-300 font-sans">
+                            <p className="text-xs text-slate-400 font-sans">
                               {currentLesson.title.replace(/^\d+\.\s*/, '')}
                             </p>
                           </div>
                         </div>
 
                         {/* Stage Progress Pill */}
-                        <div className="flex flex-col items-end gap-1.5">
-                          <span
-                            className="text-[10px] font-mono font-bold px-3 py-1 rounded-full border shadow-sm"
-                            style={{
-                              borderColor: 'rgba(255, 255, 255, 0.3)',
-                              color: '#ffffff',
-                              background: 'rgba(255, 255, 255, 0.1)',
-                              backdropFilter: 'blur(10px)',
-                            }}
-                          >
+                        <div className="flex flex-col items-end gap-1">
+                          <span className="text-[11px] font-mono text-slate-400 bg-white/5 px-2.5 py-0.5 rounded-md border border-white/10">
                             {currentLesson.tierTitle} ({stageIndex}/{stageLessons.length})
                           </span>
-                          <div className="w-28 h-1.5 rounded-full bg-white/15 overflow-hidden">
+                          <div className="w-24 h-1 rounded-full bg-white/10 overflow-hidden">
                             <div
-                              className="h-full rounded-full transition-all duration-500"
-                              style={{
-                                width: `${stageProgressPct}%`,
-                                backgroundColor: 'var(--branch-main)',
-                              }}
+                              className="h-full rounded-full transition-all duration-500 bg-sky-400"
+                              style={{ width: `${stageProgressPct}%` }}
                             />
                           </div>
                         </div>
                       </div>
 
-                      {/* Core Content */}
-                      <div className="space-y-2.5 text-xs">
+                      {/* Core Content (Matte Satin Cards) */}
+                      <div className="space-y-3 text-xs">
                         {/* 1. What You'll Learn */}
                         <div
-                          className="p-4 rounded-2xl space-y-1"
+                          className="p-3.5 rounded-xl space-y-1"
                           style={{
-                            background: 'rgba(255, 255, 255, 0.06)',
-                            border: '1px solid rgba(255, 255, 255, 0.16)',
-                            boxShadow: 'inset 0 1px 1.5px rgba(255, 255, 255, 0.3), 0 4px 16px rgba(0, 0, 0, 0.2)',
-                            backdropFilter: 'blur(16px)',
+                            background: 'rgba(255, 255, 255, 0.02)',
+                            border: '1px solid rgba(255, 255, 255, 0.08)',
                           }}
                         >
-                          <span
-                            className="font-bold text-[10px] uppercase tracking-wider flex items-center gap-1.5"
-                            style={{ color: 'var(--branch-main)' }}
-                          >
-                            <span>📖</span>
-                            <span>What You&apos;ll Learn:</span>
+                          <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-slate-400 font-mono">
+                            <span>What You&apos;ll Learn</span>
                           </span>
-                          <p className="text-slate-100 text-xs leading-relaxed font-sans font-normal">
+                          <p className="text-slate-300 text-xs leading-relaxed font-sans font-normal">
                             {currentLesson.description}
                           </p>
                         </div>
 
                         {/* 2. Your Practice Goal */}
                         <div
-                          className="p-4 rounded-2xl space-y-1.5 shadow-md"
+                          className="p-3.5 rounded-xl space-y-1.5"
                           style={{
-                            background: 'linear-gradient(135deg, color-mix(in srgb, var(--branch-main) 18%, transparent) 0%, rgba(255, 255, 255, 0.05) 100%)',
-                            border: '1.5px solid color-mix(in srgb, var(--branch-main) 60%, white 30%)',
-                            boxShadow: 'inset 0 1px 2px rgba(255, 255, 255, 0.45), 0 8px 24px color-mix(in srgb, var(--branch-main) 20%, transparent)',
-                            backdropFilter: 'blur(16px)',
+                            background: 'rgba(56, 189, 248, 0.05)',
+                            border: '1px solid rgba(56, 189, 248, 0.25)',
                           }}
                         >
-                          <span
-                            className="font-bold text-[11px] uppercase tracking-wider block"
-                            style={{ color: 'var(--branch-main)' }}
-                          >
-                            🎯 Your Practice Goal:
+                          <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-sky-400 font-mono">
+                            <Target size={13} />
+                            <span>Your Practice Goal</span>
                           </span>
-                          <p className="text-white font-semibold font-sans text-xs leading-relaxed drop-shadow-sm">
+                          <p className="text-slate-100 font-medium font-sans text-xs leading-relaxed">
                             {currentLesson.expectedGoalText}
                           </p>
                         </div>
@@ -360,19 +339,17 @@ export default function CurriculumPage() {
                         {/* 3. Real-World Context (Why Teams Use This) */}
                         {currentLesson.realWorldContext && (
                           <div
-                            className="p-4 rounded-2xl space-y-1"
+                            className="p-3.5 rounded-xl space-y-1"
                             style={{
-                              background: 'rgba(255, 255, 255, 0.06)',
-                              border: '1px solid rgba(255, 255, 255, 0.16)',
-                              boxShadow: 'inset 0 1px 1.5px rgba(255, 255, 255, 0.3), 0 4px 16px rgba(0, 0, 0, 0.2)',
-                              backdropFilter: 'blur(16px)',
+                              background: 'rgba(255, 255, 255, 0.02)',
+                              border: '1px solid rgba(255, 255, 255, 0.08)',
                             }}
                           >
-                            <span className="font-bold text-[10px] uppercase tracking-wider flex items-center gap-1.5 text-slate-200">
-                              <Building2 size={13} style={{ color: 'var(--branch-main)' }} />
-                              <span>Why Teams Use This:</span>
+                            <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-slate-400 font-mono">
+                              <Building2 size={13} className="text-indigo-400" />
+                              <span>Why Teams Use This</span>
                             </span>
-                            <p className="text-slate-200 text-xs leading-relaxed font-sans font-normal">
+                            <p className="text-slate-300 text-xs leading-relaxed font-sans font-normal">
                               {currentLesson.realWorldContext}
                             </p>
                           </div>
@@ -380,19 +357,17 @@ export default function CurriculumPage() {
                       </div>
 
                       {/* Action Button */}
-                      <div className="pt-3 border-t border-white/15">
+                      <div className="pt-2 border-t border-white/10">
                         <button
                           onClick={() => setShowBriefingModal(false)}
-                          className="w-full py-3.5 px-6 rounded-2xl font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer hover:brightness-110 active:scale-[0.98]"
+                          className="w-full py-3 px-6 rounded-xl font-semibold text-xs tracking-wide transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:brightness-105 active:scale-[0.98]"
                           style={{
-                            background: 'linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%)',
+                            background: '#ffffff',
                             color: '#090d16',
-                            border: '1px solid rgba(255, 255, 255, 0.9)',
-                            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.4), inset 0 2px 2px rgba(255, 255, 255, 1), inset 0 -2px 2px rgba(0, 0, 0, 0.15)',
                           }}
                         >
-                          <span>🚀 Start Level {currentIndex + 1} Challenge</span>
-                          <ArrowRight size={16} />
+                          <span>Start Level {currentIndex + 1} Challenge</span>
+                          <ArrowRight size={14} />
                         </button>
                       </div>
                     </motion.div>
@@ -401,7 +376,7 @@ export default function CurriculumPage() {
               })()}
             </AnimatePresence>
 
-            {/* 2. Center Celebration & Concept Learning Modal (True Liquid Glassmorphism Overlay) */}
+            {/* 2. Center Celebration & Concept Learning Modal (Matte Smoked Satin Glass) */}
             <AnimatePresence>
               {isCurrentSessionCompleted && (() => {
                 const stageLessons = LESSONS.filter((l) => l.tier === currentLesson.tier);
@@ -413,100 +388,90 @@ export default function CurriculumPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-50 bg-black/15 backdrop-blur-2xl backdrop-saturate-200 flex items-center justify-center p-4 select-none overflow-y-auto"
+                    className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 select-none overflow-y-auto"
                   >
                     <motion.div
-                      initial={{ scale: 0.88, y: 20 }}
+                      initial={{ scale: 0.92, y: 15 }}
                       animate={{ scale: 1, y: 0 }}
-                      exit={{ scale: 0.88, y: 20 }}
-                      transition={{ type: 'spring', damping: 25, stiffness: 320 }}
-                      className="w-full max-w-xl p-7 rounded-[32px] space-y-4 border my-auto text-slate-100"
+                      exit={{ scale: 0.92, y: 15 }}
+                      transition={{ type: 'spring', damping: 26, stiffness: 280 }}
+                      className="w-full max-w-lg p-6 sm:p-7 rounded-2xl space-y-4 border my-auto text-slate-100 shadow-2xl"
                       style={{
-                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 100%)',
-                        backdropFilter: 'blur(40px) saturate(220%)',
-                        WebkitBackdropFilter: 'blur(40px) saturate(220%)',
-                        border: '1px solid rgba(255, 255, 255, 0.28)',
-                        boxShadow: '0 30px 90px rgba(0, 0, 0, 0.65), inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.6), inset 0 -1.5px 1.5px 0 rgba(0, 0, 0, 0.25)',
+                        background: 'rgba(15, 23, 42, 0.92)',
+                        backdropFilter: 'blur(28px)',
+                        WebkitBackdropFilter: 'blur(28px)',
+                        border: '1px solid rgba(255, 255, 255, 0.12)',
+                        boxShadow: '0 25px 60px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
                       }}
                     >
                       {/* Header */}
-                      <div className="flex items-center justify-between border-b border-white/15 pb-4">
+                      <div className="flex items-center justify-between border-b border-white/10 pb-4">
                         <div className="flex items-center gap-3">
-                          <div
-                            className="w-10 h-10 rounded-2xl flex items-center justify-center font-black text-base shadow-lg shrink-0"
-                            style={{
-                              backgroundColor: 'var(--accent-success)',
-                              color: 'var(--bg-base)',
-                              boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.6), 0 4px 14px rgba(0,0,0,0.3)',
-                            }}
-                          >
+                          <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-base shadow-sm shrink-0">
                             ✓
                           </div>
                           <div>
-                            <h3 className="font-bold text-base text-white font-sans tracking-tight drop-shadow-sm">
+                            <h3 className="font-semibold text-base text-white font-sans tracking-tight">
                               Level {currentIndex + 1} Mastered!
                             </h3>
-                            <p className="text-xs text-slate-300 font-sans">
+                            <p className="text-xs text-slate-400 font-sans">
                               {currentLesson.title.replace(/^\d+\.\s*/, '')}
                             </p>
                           </div>
                         </div>
 
                         {/* Stage Progress Pill */}
-                        <div className="flex flex-col items-end gap-1.5">
-                          <span
-                            className="text-[10px] font-mono font-bold px-3 py-1 rounded-full border shadow-sm"
-                            style={{
-                              borderColor: 'rgba(255, 255, 255, 0.3)',
-                              color: '#ffffff',
-                              background: 'rgba(255, 255, 255, 0.1)',
-                              backdropFilter: 'blur(10px)',
-                            }}
-                          >
+                        <div className="flex flex-col items-end gap-1">
+                          <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-md border border-emerald-500/20">
                             {currentLesson.tierTitle} ({stageIndex}/{stageLessons.length})
                           </span>
-                          <div className="w-28 h-1.5 rounded-full bg-white/15 overflow-hidden">
+                          <div className="w-24 h-1 rounded-full bg-white/10 overflow-hidden">
                             <div
-                              className="h-full rounded-full transition-all duration-500"
-                              style={{
-                                width: `${stageProgressPct}%`,
-                                backgroundColor: 'var(--branch-main)',
-                              }}
+                              className="h-full rounded-full transition-all duration-500 bg-emerald-400"
+                              style={{ width: `${stageProgressPct}%` }}
                             />
                           </div>
                         </div>
                       </div>
 
-                      {/* 4 Rich Learning Cards */}
-                      <div className="space-y-2 text-xs">
+                      {/* Learning Cards (Matte Satin) */}
+                      <div className="space-y-2.5 text-xs">
                         {/* 1. What Just Happened */}
-                        <div className="p-3 rounded-xl bg-black/60 border border-white/10 space-y-1">
-                          <span
-                            className="font-bold text-[10px] uppercase tracking-wider flex items-center gap-1.5"
-                            style={{ color: 'var(--branch-main)' }}
-                          >
+                        <div
+                          className="p-3 rounded-xl space-y-1"
+                          style={{
+                            background: 'rgba(255, 255, 255, 0.02)',
+                            border: '1px solid rgba(255, 255, 255, 0.08)',
+                          }}
+                        >
+                          <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-sky-400 font-mono">
                             <Sparkles size={12} />
-                            <span>1. What Just Happened:</span>
+                            <span>1. What Just Happened</span>
                           </span>
-                          <p className="text-slate-200 text-[11px] leading-relaxed font-sans font-normal">
+                          <p className="text-slate-300 text-xs leading-relaxed font-sans font-normal">
                             {currentLesson.pedagogicalTip || currentLesson.description}
                           </p>
                         </div>
 
                         {/* 2. Syntax Breakdown */}
                         {currentLesson.recommendedCommands && currentLesson.recommendedCommands.length > 0 && (
-                          <div className="p-3 rounded-xl bg-black/60 border border-white/10 space-y-1">
-                            <span className="font-bold text-[10px] uppercase tracking-wider flex items-center gap-1.5 text-sky-400">
-                              <span>🔍</span>
-                              <span>2. Syntax Anatomy:</span>
+                          <div
+                            className="p-3 rounded-xl space-y-1.5"
+                            style={{
+                              background: 'rgba(255, 255, 255, 0.02)',
+                              border: '1px solid rgba(255, 255, 255, 0.08)',
+                            }}
+                          >
+                            <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-slate-400 font-mono">
+                              <span>2. Syntax Anatomy</span>
                             </span>
-                            <div className="text-slate-300 text-[11px] font-mono leading-relaxed">
+                            <div className="text-slate-300 text-xs font-mono leading-relaxed space-y-1">
                               {currentLesson.recommendedCommands.map((c) => (
                                 <div key={c} className="flex items-center gap-2">
-                                  <code className="px-1.5 py-0.5 rounded bg-sky-950/60 text-sky-300 border border-sky-500/30 font-bold">
+                                  <code className="px-1.5 py-0.5 rounded bg-sky-950/60 text-sky-300 border border-sky-500/30 font-bold text-[11px]">
                                     git {c}
                                   </code>
-                                  <span className="text-[11px] text-slate-300 font-sans font-normal">
+                                  <span className="text-xs text-slate-300 font-sans font-normal">
                                     {c === 'init'
                                       ? 'Initializes the hidden local repository database (.git) in this folder.'
                                       : c.includes('commit')
@@ -523,12 +488,18 @@ export default function CurriculumPage() {
 
                         {/* 3. Pro Tip & Gotcha Defense */}
                         {currentLesson.commonGotcha && (
-                          <div className="p-3 rounded-xl bg-black/60 border border-amber-500/30 space-y-1">
-                            <span className="font-bold text-[10px] uppercase tracking-wider flex items-center gap-1.5 text-amber-300">
+                          <div
+                            className="p-3 rounded-xl space-y-1"
+                            style={{
+                              background: 'rgba(245, 158, 11, 0.04)',
+                              border: '1px solid rgba(245, 158, 11, 0.25)',
+                            }}
+                          >
+                            <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-amber-400 font-mono">
                               <AlertTriangle size={12} />
-                              <span>3. Watch Out For (Gotcha):</span>
+                              <span>3. Watch Out For (Gotcha)</span>
                             </span>
-                            <p className="text-slate-300 text-[11px] leading-relaxed font-sans font-normal">
+                            <p className="text-slate-300 text-xs leading-relaxed font-sans font-normal">
                               {currentLesson.commonGotcha}
                             </p>
                           </div>
@@ -536,12 +507,18 @@ export default function CurriculumPage() {
 
                         {/* 4. Why Teams Use This */}
                         {currentLesson.realWorldContext && (
-                          <div className="p-3 rounded-xl bg-black/60 border border-white/10 space-y-1">
-                            <span className="font-bold text-[10px] uppercase tracking-wider flex items-center gap-1.5 text-slate-300">
-                              <Building2 size={12} style={{ color: 'var(--branch-main)' }} />
-                              <span>4. Why Teams Use This:</span>
+                          <div
+                            className="p-3 rounded-xl space-y-1"
+                            style={{
+                              background: 'rgba(255, 255, 255, 0.02)',
+                              border: '1px solid rgba(255, 255, 255, 0.08)',
+                            }}
+                          >
+                            <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-slate-400 font-mono">
+                              <Building2 size={12} className="text-indigo-400" />
+                              <span>4. Why Teams Use This</span>
                             </span>
-                            <p className="text-slate-300 text-[11px] leading-relaxed font-sans font-normal">
+                            <p className="text-slate-300 text-xs leading-relaxed font-sans font-normal">
                               {currentLesson.realWorldContext}
                             </p>
                           </div>
@@ -554,33 +531,25 @@ export default function CurriculumPage() {
                           <>
                             <div className="flex items-center justify-between text-[11px] text-slate-400 font-sans px-1">
                               <span>Up Next:</span>
-                              <span className="font-semibold text-slate-200">
+                              <span className="font-medium text-slate-200">
                                 Level {currentIndex + 2}: {nextLesson.title.replace(/^\d+\.\s*/, '')}
                               </span>
                             </div>
                             <button
                               onClick={handleNext}
-                              className="w-full py-2.5 px-4 rounded-xl font-bold text-xs transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:brightness-110 active:scale-[0.98]"
-                              style={{
-                                backgroundColor: 'var(--branch-main)',
-                                color: 'var(--bg-base)',
-                              }}
+                              className="w-full py-3 px-4 rounded-xl font-semibold text-xs transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:brightness-110 active:scale-[0.98] bg-sky-400 text-slate-950"
                             >
                               <span>Continue to Next Level</span>
-                              <ArrowRight size={15} />
+                              <ArrowRight size={14} />
                             </button>
                           </>
                         ) : (
                           <button
                             onClick={() => router.push('/playground')}
-                            className="w-full py-2.5 px-4 rounded-xl font-bold text-xs transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:brightness-110 active:scale-[0.98]"
-                            style={{
-                              backgroundColor: 'var(--branch-main)',
-                              color: 'var(--bg-base)',
-                            }}
+                            className="w-full py-3 px-4 rounded-xl font-semibold text-xs transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:brightness-110 active:scale-[0.98] bg-emerald-400 text-slate-950"
                           >
                             <span>🏆 All {LESSONS.length} Levels Mastered! Open Sandbox</span>
-                            <ArrowRight size={15} />
+                            <ArrowRight size={14} />
                           </button>
                         )}
                       </div>
