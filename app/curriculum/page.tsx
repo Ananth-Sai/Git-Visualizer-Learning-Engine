@@ -18,6 +18,8 @@ import {
   Building2,
   AlertTriangle,
   Activity,
+  Target,
+  Lightbulb,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useRouter } from 'next/navigation';
@@ -598,32 +600,38 @@ export default function CurriculumPage() {
         {/* Right Column: Always-Visible Companion (Guide & Checklist / 3-Tree Zones) + Terminal */}
         <div className="lg:col-span-4 h-full flex flex-col gap-2.5 overflow-hidden min-h-0">
           {/* Top Companion Card: Tabbed between Guide & 3-Zones */}
-          <div className="shrink-0 h-[56%] flex flex-col rounded-2xl glass-panel-elevated shadow-xl border border-white/10 overflow-hidden bg-[var(--bg-surface)]">
+          <div
+            className="shrink-0 h-[56%] flex flex-col rounded-2xl shadow-xl overflow-hidden"
+            style={{
+              background: 'rgba(13, 17, 23, 0.9)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+            }}
+          >
             {/* Header Tabs */}
-            <div className="flex items-center justify-between px-3 py-2 border-b border-white/10 bg-black/40 text-xs">
-              <div className="flex items-center gap-1.5 font-sans font-bold">
-                <span style={{ color: 'var(--branch-main)' }}>💡</span>
-                <span className="text-slate-100 text-xs">Level {currentIndex + 1} Companion</span>
+            <div className="flex items-center justify-between px-3.5 py-2.5 border-b border-white/10 bg-black/40 text-xs">
+              <div className="flex items-center gap-2 font-sans font-semibold">
+                <span className="w-2 h-2 rounded-full bg-amber-400" />
+                <span className="text-slate-200 text-xs font-mono">Level {currentIndex + 1} Companion</span>
               </div>
 
               {/* View Switcher */}
-              <div className="flex items-center gap-1 bg-white/5 p-0.5 rounded-lg border border-white/10 text-[10px] font-sans">
+              <div className="flex items-center gap-1 bg-white/5 p-0.5 rounded-lg border border-white/10 text-[11px] font-sans">
                 <button
                   onClick={() => setShowHint(false)}
-                  className={`px-2 py-0.5 rounded-md font-semibold transition cursor-pointer ${
+                  className={`px-2.5 py-0.5 rounded-md font-medium transition cursor-pointer ${
                     !showHint
-                      ? 'bg-[var(--branch-main)] text-[var(--bg-base)] shadow'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-sky-500 text-slate-950 font-semibold shadow-sm'
+                      : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
-                  Step Guide & Goals
+                  Guide & Goals
                 </button>
                 <button
                   onClick={() => setShowHint(true)}
-                  className={`px-2 py-0.5 rounded-md font-semibold transition cursor-pointer ${
+                  className={`px-2.5 py-0.5 rounded-md font-medium transition cursor-pointer ${
                     showHint
-                      ? 'bg-[var(--branch-main)] text-[var(--bg-base)] shadow'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-sky-500 text-slate-950 font-semibold shadow-sm'
+                      : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
                   3 File Zones
@@ -632,92 +640,113 @@ export default function CurriculumPage() {
             </div>
 
             {/* Scrollable Tab Content */}
-            <div className="p-3.5 overflow-y-auto space-y-3 flex-1 text-xs">
+            <div className="p-4 overflow-y-auto space-y-3.5 flex-1 text-xs">
               {!showHint ? (
                 <>
                   {/* Title & Description */}
                   <div className="space-y-1">
-                    <h3 className="font-bold text-sm text-slate-100 font-sans">
-                      {currentLesson.title}
+                    <h3 className="font-semibold text-sm text-slate-100 font-sans tracking-tight">
+                      {currentLesson.title.replace(/^\d+\.\s*/, '')}
                     </h3>
-                    <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                    <p className="text-xs text-slate-400 leading-relaxed font-sans font-normal">
                       {currentLesson.description}
                     </p>
                   </div>
 
-                  {/* 🎯 Practice Goal Card */}
+                  {/* Practice Goal Card */}
                   <div
-                    className="p-3 rounded-xl bg-black/40 space-y-1 text-xs shadow-sm"
+                    className="p-3.5 rounded-xl space-y-1.5 text-xs shadow-sm"
                     style={{
-                      border: '1px solid var(--border-subtle, rgba(255,255,255,0.15))',
+                      background: 'rgba(56, 189, 248, 0.05)',
+                      border: '1px solid rgba(56, 189, 248, 0.25)',
                     }}
                   >
-                    <span
-                      className="font-bold text-[11px] uppercase tracking-wider block"
-                      style={{ color: 'var(--branch-main)' }}
-                    >
-                      🎯 Goal Checklist:
+                    <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-sky-400 font-mono">
+                      <Target size={13} />
+                      <span>Practice Goal</span>
                     </span>
-                    <p className="text-slate-100 font-medium font-sans leading-relaxed">
+                    <p className="text-slate-100 font-medium font-sans leading-relaxed text-xs">
                       {currentLesson.expectedGoalText}
                     </p>
                   </div>
 
-                  {/* 💡 What to Do Steps */}
-                  <div className="p-3 rounded-xl bg-black/50 border border-white/10 text-xs font-sans space-y-1.5">
-                    <span className="text-slate-200 font-bold text-[11px] uppercase tracking-wider flex items-center gap-1">
-                      <span>💡</span> Step-by-Step Action:
+                  {/* What to Do Steps */}
+                  <div
+                    className="p-3.5 rounded-xl text-xs font-sans space-y-2"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.02)',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                    }}
+                  >
+                    <span className="text-amber-400 font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 font-mono">
+                      <Lightbulb size={13} />
+                      <span>Step-by-Step Action</span>
                     </span>
-                    <ul className="list-disc list-inside space-y-1 text-slate-300 text-[11px] leading-relaxed">
+                    <ul className="list-disc list-inside space-y-1 text-slate-300 text-xs leading-relaxed font-normal">
                       {currentLesson.hints.map((hint, hIdx) => (
                         <li key={hIdx}>{hint}</li>
                       ))}
                     </ul>
                   </div>
 
-                  {/* 📖 Day 1 Terms Decoder */}
-                  <div className="p-3 rounded-xl bg-black/40 border border-white/10 space-y-1.5 text-[11px]">
-                    <span
-                      className="font-bold text-[10px] uppercase tracking-wider flex items-center gap-1"
-                      style={{ color: 'var(--branch-main)' }}
-                    >
-                      <Sparkles size={12} />
-                      <span>Day 1 Terms Decoder:</span>
+                  {/* Terms Decoder */}
+                  <div
+                    className="p-3.5 rounded-xl space-y-2 text-xs"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.02)',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                    }}
+                  >
+                    <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-slate-300 font-mono">
+                      <Sparkles size={13} className="text-purple-400" />
+                      <span>Core Terms</span>
                     </span>
-                    <div className="space-y-1 text-slate-300 font-sans leading-snug">
+                    <div className="space-y-1.5 text-slate-300 font-sans leading-relaxed text-xs">
                       <div>
-                        <strong className="text-slate-100">📍 HEAD:</strong> The &quot;You Are Here&quot; camera lens showing your active snapshot view.
+                        <strong className="text-slate-100 font-semibold">HEAD:</strong> The camera lens showing your active snapshot view.
                       </div>
                       <div>
-                        <strong className="text-slate-100">📸 Snapshot ID (e.g. 4d4a):</strong> Unique tracking fingerprint for that exact save point.
+                        <strong className="text-slate-100 font-semibold">Snapshot ID:</strong> Unique cryptographic fingerprint for each save point.
                       </div>
                       <div>
-                        <strong className="text-slate-100">🌿 Branch (main):</strong> A movable sticky-note label attached to the latest commit.
+                        <strong className="text-slate-100 font-semibold">Branch (main):</strong> A movable label attached to the latest commit.
                       </div>
                     </div>
                   </div>
 
-                  {/* 🏢 Real-World Context Card */}
+                  {/* Real-World Context Card */}
                   {currentLesson.realWorldContext && (
-                    <div className="p-3 rounded-xl bg-black/40 border border-white/10 space-y-1 text-xs shadow-sm">
-                      <span className="font-bold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-slate-200">
-                        <Building2 size={13} style={{ color: 'var(--branch-main)' }} />
-                        <span>Why Teams Use This:</span>
+                    <div
+                      className="p-3.5 rounded-xl space-y-1.5 text-xs shadow-sm"
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.02)',
+                        border: '1px solid rgba(255, 255, 255, 0.08)',
+                      }}
+                    >
+                      <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-slate-300 font-mono">
+                        <Building2 size={13} className="text-indigo-400" />
+                        <span>Why Teams Use This</span>
                       </span>
-                      <p className="text-slate-300 text-[11px] leading-relaxed font-sans">
+                      <p className="text-slate-300 text-xs leading-relaxed font-sans font-normal">
                         {currentLesson.realWorldContext}
                       </p>
                     </div>
                   )}
 
-                  {/* ⚠️ Common Gotcha Card */}
+                  {/* Common Gotcha Card */}
                   {currentLesson.commonGotcha && (
-                    <div className="p-3 rounded-xl bg-black/40 border border-amber-500/30 space-y-1 text-xs shadow-sm">
-                      <span className="font-bold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-amber-300">
+                    <div
+                      className="p-3.5 rounded-xl space-y-1.5 text-xs shadow-sm"
+                      style={{
+                        background: 'rgba(245, 158, 11, 0.04)',
+                        border: '1px solid rgba(245, 158, 11, 0.25)',
+                      }}
+                    >
+                      <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-amber-400 font-mono">
                         <AlertTriangle size={13} />
-                        <span>Common Gotcha:</span>
+                        <span>Common Gotcha</span>
                       </span>
-                      <p className="text-slate-300 text-[11px] leading-relaxed font-sans">
+                      <p className="text-slate-300 text-xs leading-relaxed font-sans font-normal">
                         {currentLesson.commonGotcha}
                       </p>
                     </div>
