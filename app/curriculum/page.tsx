@@ -243,6 +243,25 @@ export default function CurriculumPage() {
                 const stageIndex = stageLessons.findIndex((l) => l.id === currentLesson.id) + 1;
                 const stageProgressPct = Math.round((stageIndex / stageLessons.length) * 100);
 
+                // Stage-Adaptive Palette Calculation
+                const stageColor =
+                  currentLesson.tier === 1
+                    ? '#38bdf8'
+                    : currentLesson.tier === 2
+                    ? '#c084fc'
+                    : currentLesson.tier === 3
+                    ? '#fbbf24'
+                    : '#fb7185';
+
+                const stageAccent =
+                  currentLesson.tier === 1
+                    ? '#10b981'
+                    : currentLesson.tier === 2
+                    ? '#38bdf8'
+                    : currentLesson.tier === 3
+                    ? '#f97316'
+                    : '#fbbf24';
+
                 return (
                   <motion.div
                     initial={{ opacity: 0 }}
@@ -255,7 +274,7 @@ export default function CurriculumPage() {
                       animate={{ scale: 1, y: 0 }}
                       exit={{ scale: 0.92, y: 15 }}
                       transition={{ type: 'spring', damping: 26, stiffness: 280 }}
-                      className="w-full max-w-lg p-6 sm:p-7 rounded-2xl space-y-4 border my-auto text-slate-100 shadow-2xl"
+                      className="w-full max-w-lg p-6 sm:p-7 rounded-2xl space-y-4 border my-auto text-slate-100 shadow-2xl relative overflow-hidden"
                       style={{
                         background: 'rgba(18, 19, 23, 0.96)',
                         backdropFilter: 'blur(24px)',
@@ -264,15 +283,21 @@ export default function CurriculumPage() {
                         boxShadow: '0 25px 60px rgba(0, 0, 0, 0.85), inset 0 1px 1px rgba(255, 255, 255, 0.1)',
                       }}
                     >
+                      {/* Ambient corner light adapted to stage */}
+                      <div
+                        className="absolute -top-12 -right-12 w-32 h-32 rounded-full blur-3xl pointer-events-none opacity-20"
+                        style={{ backgroundColor: stageColor }}
+                      />
+
                       {/* Header */}
-                      <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                      <div className="flex items-center justify-between border-b border-white/10 pb-4 relative z-10">
                         <div className="flex items-center gap-3">
                           <div
                             className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-base shadow-sm shrink-0"
                             style={{
-                              backgroundColor: 'rgba(245, 158, 11, 0.15)',
-                              color: '#fbbf24',
-                              border: '1px solid rgba(245, 158, 11, 0.3)',
+                              backgroundColor: `${stageColor}18`,
+                              color: stageColor,
+                              border: `1px solid ${stageColor}40`,
                             }}
                           >
                             <Sparkles size={18} />
@@ -289,20 +314,27 @@ export default function CurriculumPage() {
 
                         {/* Stage Progress Pill */}
                         <div className="flex flex-col items-end gap-1">
-                          <span className="text-[11px] font-mono text-slate-400 bg-white/5 px-2.5 py-0.5 rounded-md border border-white/10">
+                          <span
+                            className="text-[11px] font-mono font-medium px-2.5 py-0.5 rounded-md border"
+                            style={{
+                              backgroundColor: `${stageColor}12`,
+                              color: stageColor,
+                              borderColor: `${stageColor}30`,
+                            }}
+                          >
                             {currentLesson.tierTitle} ({stageIndex}/{stageLessons.length})
                           </span>
                           <div className="w-24 h-1 rounded-full bg-white/10 overflow-hidden">
                             <div
-                              className="h-full rounded-full transition-all duration-500 bg-emerald-400"
-                              style={{ width: `${stageProgressPct}%` }}
+                              className="h-full rounded-full transition-all duration-500"
+                              style={{ width: `${stageProgressPct}%`, backgroundColor: stageColor }}
                             />
                           </div>
                         </div>
                       </div>
 
-                      {/* Core Content (Multi-Color Functional Cards) */}
-                      <div className="space-y-3 text-xs">
+                      {/* Core Content (Stage-Adaptive Functional Cards) */}
+                      <div className="space-y-3 text-xs relative z-10">
                         {/* 1. What You'll Learn (Neutral Slate) */}
                         <div
                           className="p-3.5 rounded-xl space-y-1"
@@ -319,34 +351,40 @@ export default function CurriculumPage() {
                           </p>
                         </div>
 
-                        {/* 2. Your Practice Goal (Warm Amber / Gold Focus Card) */}
+                        {/* 2. Your Practice Goal (Adaptive Stage Primary Card) */}
                         <div
                           className="p-3.5 rounded-xl space-y-1.5"
                           style={{
-                            background: 'rgba(245, 158, 11, 0.08)',
-                            border: '1px solid rgba(245, 158, 11, 0.35)',
+                            background: `${stageColor}10`,
+                            border: `1px solid ${stageColor}40`,
                           }}
                         >
-                          <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-amber-400 font-mono">
+                          <span
+                            className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 font-mono"
+                            style={{ color: stageColor }}
+                          >
                             <Target size={13} />
                             <span>Your Practice Goal</span>
                           </span>
-                          <p className="text-amber-50 font-medium font-sans text-xs leading-relaxed">
+                          <p className="text-white font-medium font-sans text-xs leading-relaxed">
                             {currentLesson.expectedGoalText}
                           </p>
                         </div>
 
-                        {/* 3. Real-World Context (Soft Violet Card) */}
+                        {/* 3. Real-World Context (Adaptive Stage Accent Card) */}
                         {currentLesson.realWorldContext && (
                           <div
                             className="p-3.5 rounded-xl space-y-1"
                             style={{
-                              background: 'rgba(168, 85, 247, 0.04)',
-                              border: '1px solid rgba(168, 85, 247, 0.2)',
+                              background: `${stageAccent}08`,
+                              border: `1px solid ${stageAccent}25`,
                             }}
                           >
-                            <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-purple-300 font-mono">
-                              <Building2 size={13} className="text-purple-400" />
+                            <span
+                              className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 font-mono"
+                              style={{ color: stageAccent }}
+                            >
+                              <Building2 size={13} />
                               <span>Why Teams Use This</span>
                             </span>
                             <p className="text-slate-300 text-xs leading-relaxed font-sans font-normal">
@@ -357,7 +395,7 @@ export default function CurriculumPage() {
                       </div>
 
                       {/* Action Button */}
-                      <div className="pt-2 border-t border-white/10">
+                      <div className="pt-2 border-t border-white/10 relative z-10">
                         <button
                           onClick={() => setShowBriefingModal(false)}
                           className="w-full py-3 px-6 rounded-xl font-semibold text-xs tracking-wide transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:brightness-105 active:scale-[0.98]"
