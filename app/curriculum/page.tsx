@@ -243,151 +243,100 @@ export default function CurriculumPage() {
                 const stageIndex = stageLessons.findIndex((l) => l.id === currentLesson.id) + 1;
                 const stageProgressPct = Math.round((stageIndex / stageLessons.length) * 100);
 
-                // Stage-Adaptive Palette Calculation
-                const stageColor =
-                  currentLesson.tier === 1
-                    ? '#38bdf8'
-                    : currentLesson.tier === 2
-                    ? '#c084fc'
-                    : currentLesson.tier === 3
-                    ? '#fbbf24'
-                    : '#fb7185';
-
-                const stageAccent =
-                  currentLesson.tier === 1
-                    ? '#10b981'
-                    : currentLesson.tier === 2
-                    ? '#38bdf8'
-                    : currentLesson.tier === 3
-                    ? '#f97316'
-                    : '#fbbf24';
-
                 return (
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 select-none overflow-y-auto"
+                    className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4 select-none overflow-y-auto"
                   >
                     <motion.div
                       initial={{ scale: 0.92, y: 15 }}
                       animate={{ scale: 1, y: 0 }}
                       exit={{ scale: 0.92, y: 15 }}
                       transition={{ type: 'spring', damping: 26, stiffness: 280 }}
-                      className="w-full max-w-lg p-6 sm:p-7 rounded-2xl space-y-4 border my-auto text-slate-100 shadow-2xl relative overflow-hidden"
+                      className="w-full max-w-lg p-6 sm:p-7 rounded-2xl space-y-4 border my-auto text-slate-100 shadow-2xl"
                       style={{
-                        background: 'rgba(18, 19, 23, 0.96)',
-                        backdropFilter: 'blur(24px)',
-                        WebkitBackdropFilter: 'blur(24px)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        boxShadow: '0 25px 60px rgba(0, 0, 0, 0.85), inset 0 1px 1px rgba(255, 255, 255, 0.1)',
+                        background: '#16181d',
+                        border: '1px solid rgba(255, 255, 255, 0.12)',
+                        boxShadow: '0 30px 80px rgba(0, 0, 0, 0.9), inset 0 1px 1px rgba(255, 255, 255, 0.1)',
                       }}
                     >
-                      {/* Ambient corner light adapted to stage */}
-                      <div
-                        className="absolute -top-12 -right-12 w-32 h-32 rounded-full blur-3xl pointer-events-none opacity-20"
-                        style={{ backgroundColor: stageColor }}
-                      />
-
-                      {/* Header */}
-                      <div className="flex items-center justify-between border-b border-white/10 pb-4 relative z-10">
+                      {/* Header (Clean Monochrome + Emerald Progress) */}
+                      <div className="flex items-center justify-between border-b border-white/10 pb-4">
                         <div className="flex items-center gap-3">
-                          <div
-                            className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-base shadow-sm shrink-0"
-                            style={{
-                              backgroundColor: `${stageColor}18`,
-                              color: stageColor,
-                              border: `1px solid ${stageColor}40`,
-                            }}
-                          >
-                            <Sparkles size={18} />
+                          <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/15 flex items-center justify-center text-slate-100 font-bold text-base shadow-sm shrink-0 font-mono">
+                            {currentIndex + 1}
                           </div>
                           <div>
-                            <h3 className="font-semibold text-base text-white font-sans tracking-tight">
-                              Level {currentIndex + 1} Mission Briefing
-                            </h3>
+                            <div className="flex items-center gap-2">
+                              <h3 className="font-bold text-base text-white font-sans tracking-tight">
+                                {currentLesson.title.replace(/^\d+\.\s*/, '')}
+                              </h3>
+                            </div>
                             <p className="text-xs text-slate-400 font-sans">
-                              {currentLesson.title.replace(/^\d+\.\s*/, '')}
+                              {currentLesson.tierTitle} · Stage {currentLesson.tier}
                             </p>
                           </div>
                         </div>
 
-                        {/* Stage Progress Pill */}
-                        <div className="flex flex-col items-end gap-1">
-                          <span
-                            className="text-[11px] font-mono font-medium px-2.5 py-0.5 rounded-md border"
-                            style={{
-                              backgroundColor: `${stageColor}12`,
-                              color: stageColor,
-                              borderColor: `${stageColor}30`,
-                            }}
-                          >
-                            {currentLesson.tierTitle} ({stageIndex}/{stageLessons.length})
+                        {/* Progress Badge */}
+                        <div className="flex flex-col items-end gap-1 font-mono">
+                          <span className="text-[11px] text-slate-300 bg-white/5 px-2.5 py-0.5 rounded-md border border-white/10 font-medium">
+                            {stageIndex} / {stageLessons.length} Complete
                           </span>
                           <div className="w-24 h-1 rounded-full bg-white/10 overflow-hidden">
                             <div
-                              className="h-full rounded-full transition-all duration-500"
-                              style={{ width: `${stageProgressPct}%`, backgroundColor: stageColor }}
+                              className="h-full rounded-full transition-all duration-500 bg-emerald-400"
+                              style={{ width: `${stageProgressPct}%` }}
                             />
                           </div>
                         </div>
                       </div>
 
-                      {/* Core Content (Stage-Adaptive Functional Cards) */}
-                      <div className="space-y-3 text-xs relative z-10">
-                        {/* 1. What You'll Learn (Neutral Slate) */}
-                        <div
-                          className="p-3.5 rounded-xl space-y-1"
-                          style={{
-                            background: 'rgba(255, 255, 255, 0.03)',
-                            border: '1px solid rgba(255, 255, 255, 0.08)',
-                          }}
-                        >
-                          <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-slate-400 font-mono">
-                            <span>What You&apos;ll Learn</span>
-                          </span>
+                      {/* Structured Info Cards (Non-Blank Developer Docs Style) */}
+                      <div className="space-y-3 text-xs">
+                        {/* 1. Core Mission & Target Command */}
+                        <div className="p-3.5 rounded-xl bg-white/[0.025] border border-white/10 space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="font-mono text-[10px] text-slate-400 uppercase tracking-wider font-semibold">
+                              Target Concept & Command
+                            </span>
+                            {currentLesson.recommendedCommands && currentLesson.recommendedCommands.length > 0 && (
+                              <code className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-mono text-[11px] font-bold">
+                                git {currentLesson.recommendedCommands[0]}
+                              </code>
+                            )}
+                          </div>
                           <p className="text-slate-300 text-xs leading-relaxed font-sans font-normal">
                             {currentLesson.description}
                           </p>
                         </div>
 
-                        {/* 2. Your Practice Goal (Adaptive Stage Primary Card) */}
-                        <div
-                          className="p-3.5 rounded-xl space-y-1.5"
-                          style={{
-                            background: `${stageColor}10`,
-                            border: `1px solid ${stageColor}40`,
-                          }}
-                        >
-                          <span
-                            className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 font-mono"
-                            style={{ color: stageColor }}
-                          >
-                            <Target size={13} />
-                            <span>Your Practice Goal</span>
-                          </span>
+                        {/* 2. Your Practice Goal (High Contrast Emerald Focus) */}
+                        <div className="p-3.5 rounded-xl bg-emerald-500/[0.04] border border-emerald-500/30 space-y-1.5 shadow-sm">
+                          <div className="flex items-center justify-between">
+                            <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-emerald-400 font-mono">
+                              <Target size={13} />
+                              <span>Practice Goal</span>
+                            </span>
+                            <span className="text-[10px] font-mono text-emerald-300/80 bg-emerald-500/10 px-2 py-0.5 rounded">
+                              Required
+                            </span>
+                          </div>
                           <p className="text-white font-medium font-sans text-xs leading-relaxed">
                             {currentLesson.expectedGoalText}
                           </p>
                         </div>
 
-                        {/* 3. Real-World Context (Adaptive Stage Accent Card) */}
+                        {/* 3. Real-World Context (Clean Key Takeaway) */}
                         {currentLesson.realWorldContext && (
-                          <div
-                            className="p-3.5 rounded-xl space-y-1"
-                            style={{
-                              background: `${stageAccent}08`,
-                              border: `1px solid ${stageAccent}25`,
-                            }}
-                          >
-                            <span
-                              className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 font-mono"
-                              style={{ color: stageAccent }}
-                            >
-                              <Building2 size={13} />
-                              <span>Why Teams Use This</span>
+                          <div className="p-3.5 rounded-xl bg-white/[0.025] border border-white/10 space-y-1">
+                            <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-slate-300 font-mono">
+                              <Building2 size={13} className="text-slate-400" />
+                              <span>Industry Takeaway</span>
                             </span>
-                            <p className="text-slate-300 text-xs leading-relaxed font-sans font-normal">
+                            <p className="text-slate-400 text-xs leading-relaxed font-sans font-normal">
                               {currentLesson.realWorldContext}
                             </p>
                           </div>
@@ -395,14 +344,10 @@ export default function CurriculumPage() {
                       </div>
 
                       {/* Action Button */}
-                      <div className="pt-2 border-t border-white/10 relative z-10">
+                      <div className="pt-2 border-t border-white/10">
                         <button
                           onClick={() => setShowBriefingModal(false)}
-                          className="w-full py-3 px-6 rounded-xl font-semibold text-xs tracking-wide transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:brightness-105 active:scale-[0.98]"
-                          style={{
-                            background: '#ffffff',
-                            color: '#121316',
-                          }}
+                          className="w-full py-3 px-6 rounded-xl font-semibold text-xs tracking-wide transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:brightness-105 active:scale-[0.98] bg-white text-slate-950 hover:bg-slate-100"
                         >
                           <span>Start Level {currentIndex + 1} Challenge</span>
                           <ArrowRight size={14} />
