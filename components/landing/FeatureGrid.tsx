@@ -8,15 +8,11 @@ export const FeatureGrid: React.FC = () => {
   return (
     <section className="w-full max-w-6xl mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-10">
       <div className="text-center space-y-3 max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-400/30 text-sky-300 text-[11px] font-mono font-semibold">
-          <Sparkles size={12} className="animate-pulse" />
-          <span>BENTO ARCHITECTURE</span>
-        </div>
         <h2 className="text-3xl sm:text-4xl font-extrabold text-white font-sans tracking-tight">
-          Engineered for Deep Mental Models
+          Everything You Need to Master Git
         </h2>
         <p className="text-sm text-slate-300 font-sans">
-          Built from the ground up to replace confusing cheat-sheets with tangible topological physics.
+          Learn by seeing and doing — not by memorizing abstract commands.
         </p>
       </div>
 
