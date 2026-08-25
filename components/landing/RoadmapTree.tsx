@@ -20,31 +20,50 @@ export const RoadmapTree: React.FC = () => {
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-8 py-8">
-      {/* Progress Header Bar */}
-      <div className="p-5 rounded-2xl glass-panel-elevated shadow-xl border border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-sky-400">
-            <Award size={20} />
+      {/* Progress Header Bar with Liquid Glass */}
+      <div
+        className="p-6 rounded-[32px] shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-100 relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 100%)',
+          backdropFilter: 'blur(36px) saturate(200%)',
+          WebkitBackdropFilter: 'blur(36px) saturate(200%)',
+          border: '1px solid rgba(255, 255, 255, 0.22)',
+          boxShadow: '0 25px 70px rgba(0, 0, 0, 0.55), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.45)',
+        }}
+      >
+        <div className="flex items-center gap-3.5">
+          <div
+            className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg"
+            style={{
+              background: 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)',
+              boxShadow: '0 8px 20px rgba(56, 189, 248, 0.35), inset 0 1px 1.5px rgba(255,255,255,0.6)',
+            }}
+          >
+            <Award size={22} className="text-white" />
           </div>
           <div>
-            <h3 className="font-bold text-sm text-slate-100 font-sans">
+            <h3 className="font-extrabold text-base text-white font-sans tracking-tight">
               Interactive Curriculum Roadmap
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-300 font-sans">
               {completedLessonIds.length} of {LESSONS.length} levels mastered ({progressPercent}%)
             </p>
           </div>
         </div>
 
         {/* Mini progress bar */}
-        <div className="w-full sm:w-64 space-y-1.5">
-          <div className="flex justify-between text-[11px] font-mono text-slate-400">
-            <span>Progress</span>
-            <span className="text-sky-400 font-bold">{progressPercent}%</span>
+        <div className="w-full sm:w-72 space-y-2">
+          <div className="flex justify-between text-xs font-mono">
+            <span className="text-slate-300">Total Mastery</span>
+            <span className="text-sky-300 font-bold">{progressPercent}%</span>
           </div>
-          <div className="w-full h-2 rounded-full bg-slate-950/80 overflow-hidden border border-white/5">
+          <div className="w-full h-2.5 rounded-full bg-black/50 overflow-hidden border border-white/15">
             <motion.div
-              className="h-full bg-gradient-to-r from-sky-400 to-purple-500 rounded-full"
+              className="h-full rounded-full"
+              style={{
+                background: 'linear-gradient(90deg, #38bdf8 0%, #a855f7 100%)',
+                boxShadow: '0 0 12px rgba(56, 189, 248, 0.5)',
+              }}
               initial={{ width: 0 }}
               animate={{ width: `${progressPercent}%` }}
               transition={{ duration: 0.8 }}
@@ -54,12 +73,12 @@ export const RoadmapTree: React.FC = () => {
       </div>
 
       {/* 3 Tier Lanes */}
-      <div className="space-y-6">
+      <div className="space-y-7">
         {/* Tier 1 Lane */}
         <TierSection
           title="Tier 1: Visual First (Zero-Syntax Barrier)"
           badge="Levels 1–4"
-          badgeColor="bg-sky-500/20 text-sky-300 border-sky-400/30"
+          badgeColor="bg-sky-500/20 text-sky-300 border-sky-400/40"
           description="Understand snapshots, HEAD observation, branch pointers, and fast-forward merges with pure visual mechanics."
           lessons={tier1Lessons}
           completedIds={completedLessonIds}
@@ -70,7 +89,7 @@ export const RoadmapTree: React.FC = () => {
         <TierSection
           title="Tier 2: CLI Transition, Staging & Remotes"
           badge="Levels 5–8"
-          badgeColor="bg-purple-500/20 text-purple-300 border-purple-400/30"
+          badgeColor="bg-purple-500/20 text-purple-300 border-purple-400/40"
           description="Master modern CLI flags (`git switch`), line diffing, 3-way merges vs rebases, and remote tracking (`origin/main`)."
           lessons={tier2Lessons}
           completedIds={completedLessonIds}
@@ -81,7 +100,7 @@ export const RoadmapTree: React.FC = () => {
         <TierSection
           title="Tier 3: Production Scenarios & Recovery"
           badge="Levels 9–12"
-          badgeColor="bg-amber-500/20 text-amber-300 border-amber-400/30"
+          badgeColor="bg-amber-500/20 text-amber-300 border-amber-400/40"
           description="Visual 3-Way conflict resolution, Interactive Rebase studio, Stash pocket, and Reflog disaster recovery."
           lessons={tier3Lessons}
           completedIds={completedLessonIds}
@@ -118,65 +137,80 @@ const TierSection: React.FC<TierSectionProps> = ({
   onSelect,
 }) => {
   return (
-    <div className="p-6 rounded-2xl glass-panel shadow-xl border border-white/5 space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-3">
+    <div
+      className="p-7 rounded-[32px] shadow-2xl space-y-5 text-slate-100 relative overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%)',
+        backdropFilter: 'blur(30px) saturate(190%)',
+        WebkitBackdropFilter: 'blur(30px) saturate(190%)',
+        border: '1px solid rgba(255, 255, 255, 0.18)',
+        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.35)',
+      }}
+    >
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-4">
         <div className="space-y-1">
-          <div className="flex items-center gap-2.5">
-            <h4 className="font-bold text-sm text-slate-100 font-sans">{title}</h4>
-            <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold border ${badgeColor}`}>
+          <div className="flex items-center gap-3">
+            <h4 className="font-extrabold text-base text-white font-sans tracking-tight">{title}</h4>
+            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold border ${badgeColor}`}>
               {badge}
             </span>
           </div>
-          <p className="text-xs text-slate-400">{description}</p>
+          <p className="text-xs text-slate-300 font-sans">{description}</p>
         </div>
       </div>
 
-      {/* Node Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3.5 pt-2">
+      {/* Node Cards Grid with Liquid Glass Boxes */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-1">
         {lessons.map((lesson, idx) => {
           const isDone = completedIds.includes(lesson.id);
           return (
             <motion.button
               key={lesson.id}
-              whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={{ scale: 1.03, y: -3 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => onSelect(lesson)}
-              className={`p-4 rounded-xl border text-left flex flex-col justify-between h-36 transition cursor-pointer relative overflow-hidden ${
-                isDone
-                  ? 'bg-emerald-500/10 border-emerald-500/30 hover:border-emerald-400 shadow-emerald-500/5'
-                  : 'bg-slate-950/60 border-white/5 hover:border-sky-500/40 hover:bg-slate-900/80 shadow-lg'
-              }`}
+              className="p-5 rounded-[22px] border text-left flex flex-col justify-between h-40 transition-all duration-200 cursor-pointer relative overflow-hidden group"
+              style={{
+                background: isDone
+                  ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.16) 0%, rgba(255, 255, 255, 0.04) 100%)'
+                  : 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
+                backdropFilter: 'blur(20px)',
+                borderColor: isDone ? 'rgba(16, 185, 129, 0.45)' : 'rgba(255, 255, 255, 0.15)',
+                boxShadow: isDone
+                  ? '0 12px 30px rgba(16, 185, 129, 0.15), inset 0 1px 1.5px rgba(255, 255, 255, 0.35)'
+                  : '0 8px 24px rgba(0, 0, 0, 0.35), inset 0 1px 1.5px rgba(255, 255, 255, 0.25)',
+              }}
             >
               {/* Checkpoint glow tag */}
               <div className="flex items-center justify-between w-full">
-                <span className="text-[10px] font-mono font-bold text-slate-500">
+                <span className="text-[11px] font-mono font-bold text-slate-300">
                   0{lesson.tier}.{idx + 1}
                 </span>
                 {isDone ? (
-                  <span className="flex items-center gap-1 text-[10px] font-mono font-semibold text-emerald-400 bg-emerald-500/20 px-1.5 py-0.5 rounded-full border border-emerald-500/40">
+                  <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-full border border-emerald-500/40 shadow-sm">
                     <CheckCircle size={10} />
                     Done
                   </span>
                 ) : (
-                  <span className="text-[10px] font-mono text-slate-500">
+                  <span className="text-[10px] font-mono text-slate-400 bg-white/5 px-2 py-0.5 rounded-md border border-white/10">
                     {lesson.difficulty}
                   </span>
                 )}
               </div>
 
               {/* Title & Category */}
-              <div>
-                <h5 className="font-bold text-xs text-slate-100 line-clamp-1 mb-1 font-sans">
+              <div className="my-1">
+                <h5 className="font-extrabold text-xs text-white line-clamp-1 mb-1 font-sans tracking-tight group-hover:text-sky-300 transition-colors">
                   {lesson.title.replace(/^\d+\.\s*/, '')}
                 </h5>
-                <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
+                <p className="text-[11px] text-slate-300 line-clamp-2 leading-relaxed font-sans">
                   {lesson.description}
                 </p>
               </div>
 
-              <div className="flex items-center gap-1 text-[10px] text-sky-400 font-semibold pt-1">
+              <div className="flex items-center gap-1 text-[10px] text-sky-300 font-bold pt-1 group-hover:text-sky-200">
                 <span>View Details</span>
-                <ChevronRight size={11} />
+                <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
               </div>
             </motion.button>
           );
