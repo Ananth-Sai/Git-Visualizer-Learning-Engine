@@ -248,7 +248,7 @@ export default function CurriculumPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 select-none overflow-y-auto"
+                    className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 select-none overflow-y-auto"
                   >
                     <motion.div
                       initial={{ scale: 0.92, y: 15 }}
@@ -257,11 +257,11 @@ export default function CurriculumPage() {
                       transition={{ type: 'spring', damping: 26, stiffness: 280 }}
                       className="w-full max-w-lg p-6 sm:p-7 rounded-2xl space-y-4 border my-auto text-slate-100 shadow-2xl"
                       style={{
-                        background: 'rgba(15, 23, 42, 0.92)',
-                        backdropFilter: 'blur(28px)',
-                        WebkitBackdropFilter: 'blur(28px)',
-                        border: '1px solid rgba(255, 255, 255, 0.12)',
-                        boxShadow: '0 25px 60px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.15)',
+                        background: 'rgba(18, 19, 23, 0.96)',
+                        backdropFilter: 'blur(24px)',
+                        WebkitBackdropFilter: 'blur(24px)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        boxShadow: '0 25px 60px rgba(0, 0, 0, 0.85), inset 0 1px 1px rgba(255, 255, 255, 0.1)',
                       }}
                     >
                       {/* Header */}
@@ -270,9 +270,9 @@ export default function CurriculumPage() {
                           <div
                             className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-base shadow-sm shrink-0"
                             style={{
-                              backgroundColor: 'rgba(56, 189, 248, 0.15)',
-                              color: '#38bdf8',
-                              border: '1px solid rgba(56, 189, 248, 0.3)',
+                              backgroundColor: 'rgba(245, 158, 11, 0.15)',
+                              color: '#fbbf24',
+                              border: '1px solid rgba(245, 158, 11, 0.3)',
                             }}
                           >
                             <Sparkles size={18} />
@@ -294,20 +294,20 @@ export default function CurriculumPage() {
                           </span>
                           <div className="w-24 h-1 rounded-full bg-white/10 overflow-hidden">
                             <div
-                              className="h-full rounded-full transition-all duration-500 bg-sky-400"
+                              className="h-full rounded-full transition-all duration-500 bg-emerald-400"
                               style={{ width: `${stageProgressPct}%` }}
                             />
                           </div>
                         </div>
                       </div>
 
-                      {/* Core Content (Matte Satin Cards) */}
+                      {/* Core Content (Multi-Color Functional Cards) */}
                       <div className="space-y-3 text-xs">
-                        {/* 1. What You'll Learn */}
+                        {/* 1. What You'll Learn (Neutral Slate) */}
                         <div
                           className="p-3.5 rounded-xl space-y-1"
                           style={{
-                            background: 'rgba(255, 255, 255, 0.02)',
+                            background: 'rgba(255, 255, 255, 0.03)',
                             border: '1px solid rgba(255, 255, 255, 0.08)',
                           }}
                         >
@@ -319,34 +319,34 @@ export default function CurriculumPage() {
                           </p>
                         </div>
 
-                        {/* 2. Your Practice Goal */}
+                        {/* 2. Your Practice Goal (Warm Amber / Gold Focus Card) */}
                         <div
                           className="p-3.5 rounded-xl space-y-1.5"
                           style={{
-                            background: 'rgba(56, 189, 248, 0.05)',
-                            border: '1px solid rgba(56, 189, 248, 0.25)',
+                            background: 'rgba(245, 158, 11, 0.08)',
+                            border: '1px solid rgba(245, 158, 11, 0.35)',
                           }}
                         >
-                          <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-sky-400 font-mono">
+                          <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-amber-400 font-mono">
                             <Target size={13} />
                             <span>Your Practice Goal</span>
                           </span>
-                          <p className="text-slate-100 font-medium font-sans text-xs leading-relaxed">
+                          <p className="text-amber-50 font-medium font-sans text-xs leading-relaxed">
                             {currentLesson.expectedGoalText}
                           </p>
                         </div>
 
-                        {/* 3. Real-World Context (Why Teams Use This) */}
+                        {/* 3. Real-World Context (Soft Violet Card) */}
                         {currentLesson.realWorldContext && (
                           <div
                             className="p-3.5 rounded-xl space-y-1"
                             style={{
-                              background: 'rgba(255, 255, 255, 0.02)',
-                              border: '1px solid rgba(255, 255, 255, 0.08)',
+                              background: 'rgba(168, 85, 247, 0.04)',
+                              border: '1px solid rgba(168, 85, 247, 0.2)',
                             }}
                           >
-                            <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-slate-400 font-mono">
-                              <Building2 size={13} className="text-indigo-400" />
+                            <span className="font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1.5 text-purple-300 font-mono">
+                              <Building2 size={13} className="text-purple-400" />
                               <span>Why Teams Use This</span>
                             </span>
                             <p className="text-slate-300 text-xs leading-relaxed font-sans font-normal">
@@ -363,7 +363,7 @@ export default function CurriculumPage() {
                           className="w-full py-3 px-6 rounded-xl font-semibold text-xs tracking-wide transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:brightness-105 active:scale-[0.98]"
                           style={{
                             background: '#ffffff',
-                            color: '#090d16',
+                            color: '#121316',
                           }}
                         >
                           <span>Start Level {currentIndex + 1} Challenge</span>
