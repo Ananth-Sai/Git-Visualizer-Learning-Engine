@@ -151,48 +151,66 @@ export const RoadmapTree: React.FC = () => {
                 </span>
               </div>
 
-              {/* Symmetrical 3-Column Liquid Glass Cards Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-1">
+              {/* Symmetrical 3-Column Liquid Glass Cards Grid with Rich Color Harmonies */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4.5 pt-1">
                 {stage.lessons.map((lesson) => {
                   const isDone = completedLessonIds.includes(lesson.id);
                   return (
                     <motion.button
                       key={lesson.id}
-                      whileHover={{ scale: 1.02, y: -3 }}
+                      whileHover={{ scale: 1.025, y: -3 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setSelectedDrawerLesson(lesson)}
-                      className="p-5 rounded-[22px] text-left flex flex-col justify-between min-h-[145px] transition-all duration-200 cursor-pointer relative overflow-hidden group"
+                      className="p-5 rounded-[24px] text-left flex flex-col justify-between min-h-[150px] transition-all duration-200 cursor-pointer relative overflow-hidden group"
                       style={{
-                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
-                        backdropFilter: 'blur(24px) saturate(180%)',
-                        WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-                        border: isDone ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid rgba(255, 255, 255, 0.14)',
+                        background: isDone
+                          ? `linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(255, 255, 255, 0.03) 100%)`
+                          : `linear-gradient(135deg, ${stage.color}14 0%, rgba(255, 255, 255, 0.02) 100%)`,
+                        backdropFilter: 'blur(24px) saturate(190%)',
+                        WebkitBackdropFilter: 'blur(24px) saturate(190%)',
+                        border: isDone ? '1px solid rgba(16, 185, 129, 0.45)' : `1px solid ${stage.color}35`,
                         boxShadow: isDone
-                          ? '0 10px 25px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.35)'
-                          : '0 8px 24px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.25)',
+                          ? '0 12px 30px rgba(0, 0, 0, 0.4), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.4)'
+                          : `0 10px 25px rgba(0, 0, 0, 0.35), inset 0 1.5px 1.5px rgba(255, 255, 255, 0.35)`,
                       }}
                     >
+                      {/* Ambient colored background glow orb on hover */}
+                      <div
+                        className="absolute -top-10 -right-10 w-28 h-28 rounded-full blur-2xl pointer-events-none opacity-30 group-hover:opacity-70 transition-opacity duration-300"
+                        style={{ backgroundColor: stage.color }}
+                      />
+
                       {/* Top status line */}
-                      <div className="flex items-center justify-between w-full">
-                        <span className="text-[11px] font-mono font-bold text-slate-300">
+                      <div className="flex items-center justify-between w-full relative z-10">
+                        <span
+                          className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-md"
+                          style={{
+                            backgroundColor: `${stage.color}18`,
+                            color: stage.color,
+                            border: `1px solid ${stage.color}30`,
+                          }}
+                        >
                           Level {lesson.title.split('.')[0]}
                         </span>
 
                         {isDone ? (
-                          <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-emerald-300 bg-emerald-500/20 px-2.5 py-0.5 rounded-full border border-emerald-500/40">
+                          <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-emerald-300 bg-emerald-500/20 px-2.5 py-0.5 rounded-full border border-emerald-500/40 shadow-sm">
                             <CheckCircle2 size={11} />
-                            <span>Done</span>
+                            <span>CLEARED</span>
                           </span>
                         ) : (
-                          <span className="text-[10px] font-mono text-slate-400 bg-white/5 px-2 py-0.5 rounded-md border border-white/10">
+                          <span className="text-[10px] font-mono text-slate-400 bg-black/40 px-2 py-0.5 rounded-md border border-white/10">
                             {lesson.difficulty}
                           </span>
                         )}
                       </div>
 
                       {/* Title & Description */}
-                      <div className="my-1.5">
-                        <h5 className="font-extrabold text-sm text-white line-clamp-1 mb-1 font-sans tracking-tight group-hover:text-sky-300 transition-colors">
+                      <div className="my-2 relative z-10">
+                        <h5
+                          className="font-extrabold text-sm text-white line-clamp-1 mb-1 font-sans tracking-tight transition-colors"
+                          style={{ color: '#ffffff' }}
+                        >
                           {lesson.title.replace(/^\d+\.\s*/, '')}
                         </h5>
                         <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed font-sans">
@@ -200,8 +218,11 @@ export const RoadmapTree: React.FC = () => {
                         </p>
                       </div>
 
-                      {/* Bottom link */}
-                      <div className="flex items-center gap-1 text-[11px] text-sky-300 font-bold pt-1 group-hover:text-sky-200">
+                      {/* Bottom link with stage color accent */}
+                      <div
+                        className="flex items-center gap-1 text-[11px] font-bold pt-1 transition-all relative z-10"
+                        style={{ color: stage.color }}
+                      >
                         <span>Explore Concept</span>
                         <ChevronRight size={13} className="group-hover:translate-x-1 transition-transform" />
                       </div>
