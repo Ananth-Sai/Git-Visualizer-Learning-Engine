@@ -95,8 +95,8 @@ export const ByokSettingsModal: React.FC = () => {
             <div className="p-3 rounded-xl bg-slate-950/60 border border-emerald-500/20 text-slate-300 flex items-start gap-2.5 leading-relaxed text-[11px]">
               <ShieldCheck className="text-emerald-400 shrink-0 mt-0.5" size={16} />
               <div>
-                <span className="font-bold text-emerald-400">Zero Server Logging Guarantee: </span>
-                Your custom API keys are saved exclusively in your browser&apos;s localStorage and are never stored on any server database.
+                <span className="font-bold text-emerald-400">Storage & privacy: </span>
+                Your custom API key is kept in this browser&apos;s localStorage and is sent to the AI proxy only when you request coaching. The app does not persist it in a database.
               </div>
             </div>
           </div>

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GitBranch, X, Check, ArrowUp, ArrowDown, Trash2, Edit3, Layers } from 'lucide-react';
 import { useAppStore } from '../../core/engine/StateManager';
-import { GitCommit } from '../../core/types';
+import { GitCommit, GitObject } from '../../core/types';
 
 type RebaseAction = 'pick' | 'squash' | 'reword' | 'drop';
 
@@ -64,13 +64,13 @@ export const InteractiveRebase: React.FC = () => {
     const objects = { ...repo.objects };
     let parentId = (objects[remainingItems[0].id] as GitCommit)?.parents[0] || '';
 
-    const newObjects: any = {};
+    const newObjects: Record<string, GitObject> = {};
     for (const [k, v] of Object.entries(repo.objects)) {
       if (v.type !== 'commit') newObjects[k] = v;
     }
 
     // Root commit
-    const rootCommit = Object.values(repo.objects).find((o: any) => o.type === 'commit' && o.parents.length === 0) as GitCommit;
+    const rootCommit = Object.values(repo.objects).find((o): o is GitCommit => o.type === 'commit' && o.parents.length === 0);
     if (rootCommit) newObjects[rootCommit.id] = rootCommit;
 
     let prevId = rootCommit ? rootCommit.id : '';
@@ -80,9 +80,9 @@ export const InteractiveRebase: React.FC = () => {
       const item = remainingItems[i];
       if (item.action === 'squash' && squashedMessage) {
         squashedMessage += ` + ${item.newMessage}`;
-        // Update previous commit with combined message
-        if (newObjects[prevId]) {
-          newObjects[prevId].message = squashedMessage;
+        const prevObj = newObjects[prevId];
+        if (prevObj && prevObj.type === 'commit') {
+          prevObj.message = squashedMessage;
         }
       } else {
         squashedMessage = item.newMessage;

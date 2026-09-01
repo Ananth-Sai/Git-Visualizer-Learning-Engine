@@ -1,11 +1,69 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// In-memory sliding window rate limiter for server key fallback
+interface RateLimitRecord {
+  count: number;
+  resetTime: number;
+}
+
+const ipRateLimits = new Map<string, RateLimitRecord>();
+const FREE_TIER_MAX_PER_MINUTE = 10;
+const WINDOW_MS = 60 * 1000;
+
+function checkRateLimit(ip: string): { allowed: boolean; remaining: number; resetInSec: number } {
+  const now = Date.now();
+  const record = ipRateLimits.get(ip);
+
+  // Clean expired records periodically
+  if (ipRateLimits.size > 10000) {
+    for (const [key, val] of ipRateLimits.entries()) {
+      if (now > val.resetTime) ipRateLimits.delete(key);
+    }
+  }
+
+  if (!record || now > record.resetTime) {
+    ipRateLimits.set(ip, { count: 1, resetTime: now + WINDOW_MS });
+    return { allowed: true, remaining: FREE_TIER_MAX_PER_MINUTE - 1, resetInSec: 60 };
+  }
+
+  if (record.count >= FREE_TIER_MAX_PER_MINUTE) {
+    const resetInSec = Math.ceil((record.resetTime - now) / 1000);
+    return { allowed: false, remaining: 0, resetInSec };
+  }
+
+  record.count += 1;
+  const resetInSec = Math.ceil((record.resetTime - now) / 1000);
+  return { allowed: true, remaining: FREE_TIER_MAX_PER_MINUTE - record.count, resetInSec };
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { context, systemPrompt } = await req.json();
     const provider = req.headers.get('x-provider') || 'default-free';
     const customApiKey = req.headers.get('x-custom-api-key');
     const customModel = req.headers.get('x-custom-model');
+
+    // Extract client IP
+    const forwardedFor = req.headers.get('x-forwarded-for');
+    const clientIp = (forwardedFor ? forwardedFor.split(',')[0] : req.headers.get('x-real-ip')) || '127.0.0.1';
+
+    // Apply Rate Limiting ONLY on free tier (bypassed if user provides their own API key)
+    if (!customApiKey) {
+      const rateLimit = checkRateLimit(clientIp);
+      if (!rateLimit.allowed) {
+        return NextResponse.json(
+          {
+            error: `Rate limit reached on free tier (${FREE_TIER_MAX_PER_MINUTE} req/min). Please wait ${rateLimit.resetInSec}s or configure your own BYOK key in Settings.`,
+          },
+          {
+            status: 429,
+            headers: {
+              'Retry-After': String(rateLimit.resetInSec),
+            },
+          }
+        );
+      }
+    }
 
     const promptText = `
 User Context:
@@ -70,35 +128,51 @@ Provide helpful, clear, and encouraging Git advice. Return your advice in plain 
       return NextResponse.json({ advice: content });
     }
 
-    // 3. Google Gemini (BYOK or Server Free Tier)
+    // 3. Google Gemini (BYOK or Server Free Tier with Multi-Model Fallback Chain)
     const geminiKey = customApiKey || process.env.GEMINI_API_KEY;
     if (geminiKey) {
-      const model = customModel || 'gemini-1.5-flash';
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [
-              {
-                role: 'user',
-                parts: [{ text: `${systemPrompt}\n\n${promptText}` }],
-              },
-            ],
-            generationConfig: {
-              maxOutputTokens: 300,
-              temperature: 0.3,
-            },
-          }),
-        }
-      );
+      const candidateModels = customModel
+        ? [customModel]
+        : [
+            'gemini-3.7-flash',
+            'gemini-3.6-flash',
+            'gemini-3.5-flash',
+            'gemini-2.5-flash',
+            'gemini-flash-latest',
+          ];
 
-      if (response.ok) {
-        const data = await response.json();
-        const content = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-        if (content) {
-          return NextResponse.json({ advice: content });
+      for (const model of candidateModels) {
+        try {
+          const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contents: [
+                  {
+                    role: 'user',
+                    parts: [{ text: `${systemPrompt}\n\n${promptText}` }],
+                  },
+                ],
+                generationConfig: {
+                  maxOutputTokens: 300,
+                  temperature: 0.3,
+                },
+              }),
+            }
+          );
+
+          if (response.ok) {
+            const data = await response.json();
+            const content = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            if (content) {
+              return NextResponse.json({ advice: content });
+            }
+          }
+        } catch {
+          // Attempt next model in fallback chain
+          continue;
         }
       }
     }

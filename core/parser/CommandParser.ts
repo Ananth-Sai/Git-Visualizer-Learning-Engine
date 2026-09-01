@@ -12,6 +12,38 @@ export function parseGitCommand(rawInput: string): { parsed?: ParsedCommand; err
     return { error: 'Empty command' };
   }
 
+  // Support echo / touch file creation commands in terminal
+  if (tokens[0] === 'echo' || tokens[0] === 'touch') {
+    const rawCommand = tokens[0];
+    if (rawCommand === 'touch') {
+      const targetFile = tokens[1] || 'file.txt';
+      return {
+        parsed: {
+          raw: trimmed,
+          command: 'touch',
+          args: [targetFile],
+          flags: {},
+          safety: 'safe',
+        },
+      };
+    }
+    // echo "content" > file.ext or echo "content" >> file.ext
+    const redirectIdx = tokens.findIndex((t) => t === '>' || t === '>>');
+    if (redirectIdx !== -1 && redirectIdx + 1 < tokens.length) {
+      const content = tokens.slice(1, redirectIdx).join(' ');
+      const targetFile = tokens[redirectIdx + 1];
+      return {
+        parsed: {
+          raw: trimmed,
+          command: 'echo',
+          args: [content, targetFile],
+          flags: {},
+          safety: 'safe',
+        },
+      };
+    }
+  }
+
   let cmdIndex = 0;
   if (tokens[0] === 'git') {
     cmdIndex = 1;
@@ -44,20 +76,19 @@ export function parseGitCommand(rawInput: string): { parsed?: ParsedCommand; err
       } else {
         flags[key] = true;
       }
-    } else if (token.startsWith('-')) {
+    } else if (token.startsWith('-') && !token.startsWith('--')) {
       const key = token.slice(1);
-      if (key === 'm' && i + 1 < remaining.length) {
-        flags['m'] = remaining[++i];
-      } else if (key === 'b' && i + 1 < remaining.length) {
-        flags['b'] = remaining[++i];
-      } else if (key === 'c' && i + 1 < remaining.length) {
-        flags['c'] = remaining[++i];
-      } else if (key === 'd' && i + 1 < remaining.length) {
-        flags['d'] = remaining[++i];
-      } else if (key === 'D' && i + 1 < remaining.length) {
-        flags['D'] = remaining[++i];
+      const lastChar = key[key.length - 1];
+      const requiresValue = ['m', 'b', 'c', 'd', 'D'].includes(lastChar) && i + 1 < remaining.length;
+
+      if (requiresValue) {
+        // All preceding characters are boolean flags (e.g. -am -> a is boolean, m is value)
+        for (let j = 0; j < key.length - 1; j++) {
+          flags[key[j]] = true;
+        }
+        flags[lastChar] = remaining[++i];
       } else {
-        // Individual char flags, e.g. -p, -A, -a, -i
+        // All characters are boolean flags (e.g. -p, -a, -i)
         for (const char of key) {
           flags[char] = true;
         }

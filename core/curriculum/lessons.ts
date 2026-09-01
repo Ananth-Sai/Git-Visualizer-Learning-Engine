@@ -1,4 +1,4 @@
-import { LessonObjective, GitRepositoryState, ParsedCommand } from '../types';
+import { LessonObjective, GitRepositoryState, ParsedCommand, GitCommit } from '../types';
 import {
   createInitialRepository,
   commit,
@@ -138,8 +138,8 @@ export const LESSONS: LessonObjective[] = [
     expectedGoalText: '👉 In the terminal, type `git log` or `git log --oneline` to review repository history.',
     initialState: () => {
       let state = createInitialRepository();
-      state = commit(state, { message: 'Add header component' }).state;
-      state = commit(state, { message: 'Add dark mode support' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Add header component' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Add dark mode support' }).state;
       return state;
     },
     validate: (state: GitRepositoryState, history: ParsedCommand[]) => {
@@ -169,8 +169,8 @@ export const LESSONS: LessonObjective[] = [
     expectedGoalText: '👉 Click an earlier commit node on the canvas (or type `git checkout <sha>`) to detach HEAD.',
     initialState: () => {
       let state = createInitialRepository();
-      state = commit(state, { message: 'Add navbar component' }).state;
-      state = commit(state, { message: 'Add hero layout' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Add navbar component' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Add hero layout' }).state;
       return state;
     },
     validate: (state: GitRepositoryState) => {
@@ -233,7 +233,7 @@ export const LESSONS: LessonObjective[] = [
     expectedGoalText: '👉 In the terminal, create and switch to a feature branch: `git switch -c feature`',
     initialState: () => {
       let state = createInitialRepository();
-      state = commit(state, { message: 'Base app setup' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Base app setup' }).state;
       return state;
     },
     validate: (state: GitRepositoryState) => {
@@ -296,8 +296,8 @@ export const LESSONS: LessonObjective[] = [
       let state = createInitialRepository();
       state = createBranch(state, 'feature').state;
       state = switchBranchOrCommit(state, 'feature').state;
-      state = commit(state, { message: 'Implement dark mode' }).state;
-      state = commit(state, { message: 'Add theme toggle' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Implement dark mode' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Add theme toggle' }).state;
       return state;
     },
     validate: (state: GitRepositoryState) => {
@@ -327,17 +327,17 @@ export const LESSONS: LessonObjective[] = [
     expectedGoalText: '👉 In the terminal, switch to `main` with `git switch main`, then type `git merge feature`.',
     initialState: () => {
       let state = createInitialRepository();
-      state = commit(state, { message: 'Main commit 1' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Main commit 1' }).state;
       state = createBranch(state, 'feature').state;
       state = switchBranchOrCommit(state, 'feature').state;
-      state = commit(state, { message: 'Feature work A' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Feature work A' }).state;
       state = switchBranchOrCommit(state, 'main').state;
-      state = commit(state, { message: 'Main commit 2 (diverged)' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Main commit 2 (diverged)' }).state;
       return state;
     },
     validate: (state: GitRepositoryState) => {
-      const headCommit = state.objects[state.refs.heads['main']] as any;
-      return headCommit && headCommit.parents && headCommit.parents.length === 2;
+      const headCommit = state.objects[state.refs.heads['main']];
+      return Boolean(headCommit && headCommit.type === 'commit' && headCommit.parents && headCommit.parents.length === 2);
     },
     hints: [
       'Type `git switch main` to ensure you are on destination branch.',
@@ -363,18 +363,18 @@ export const LESSONS: LessonObjective[] = [
     expectedGoalText: '👉 While on `feature`, type `git rebase main` to replay your commits on top of main.',
     initialState: () => {
       let state = createInitialRepository();
-      state = commit(state, { message: 'Base commit' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Base commit' }).state;
       state = createBranch(state, 'feature').state;
       state = switchBranchOrCommit(state, 'main').state;
-      state = commit(state, { message: 'New work on main' }).state;
+      state = commit(state, { allowEmpty: true, message: 'New work on main' }).state;
       state = switchBranchOrCommit(state, 'feature').state;
-      state = commit(state, { message: 'Feature commit' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Feature commit' }).state;
       return state;
     },
     validate: (state: GitRepositoryState, history: ParsedCommand[]) => {
       const hasRebased = history.some((c) => c.command === 'rebase');
-      const featCommit = state.objects[state.refs.heads['feature']] as any;
-      return hasRebased || featCommit?.parents?.[0] === state.refs.heads['main'];
+      const featCommit = state.objects[state.refs.heads['feature']];
+      return hasRebased || Boolean(featCommit && featCommit.type === 'commit' && featCommit.parents?.[0] === state.refs.heads['main']);
     },
     hints: [
       'Ensure you are on `feature` (`git switch feature`).',
@@ -402,9 +402,9 @@ export const LESSONS: LessonObjective[] = [
       let state = createInitialRepository();
       state = createBranch(state, 'feature').state;
       state = switchBranchOrCommit(state, 'feature').state;
-      state = commit(state, { message: 'Hotfix: fix authentication bug' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Hotfix: fix authentication bug' }).state;
       const bugfixSha = getCurrentCommitId(state)!;
-      state = commit(state, { message: 'Experimental redesign (WIP)' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Experimental redesign (WIP)' }).state;
       state = switchBranchOrCommit(state, 'main').state;
       return state;
     },
@@ -440,7 +440,7 @@ export const LESSONS: LessonObjective[] = [
     expectedGoalText: '👉 Stage `patch.ts` with `git add patch.ts`, then update the last commit with `git commit --amend -m "Updated message"`',
     initialState: () => {
       let state = createInitialRepository();
-      state = commit(state, { message: 'Add user profile (typo in msg)' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Add user profile (typo in msg)' }).state;
       state.workingTree['patch.ts'] = { path: 'patch.ts', content: 'export const patch = true;', worktreeContent: 'export const patch = true;', stage: 'untracked' };
       return state;
     },
@@ -504,7 +504,7 @@ export const LESSONS: LessonObjective[] = [
     expectedGoalText: '👉 Undo the last commit while keeping files staged by running: `git reset --soft HEAD~1`',
     initialState: () => {
       let state = createInitialRepository();
-      state = commit(state, { message: 'Mistaken commit to undo' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Mistaken commit to undo' }).state;
       return state;
     },
     validate: (state: GitRepositoryState, history: ParsedCommand[]) => {
@@ -534,8 +534,8 @@ export const LESSONS: LessonObjective[] = [
     expectedGoalText: '👉 Safely undo the bad commit on main by typing: `git revert <sha>`',
     initialState: () => {
       let state = createInitialRepository();
-      state = commit(state, { message: 'Good base commit' }).state;
-      state = commit(state, { message: 'Bug: introduces broken feature' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Good base commit' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Bug: introduces broken feature' }).state;
       return state;
     },
     validate: (state: GitRepositoryState) => {
@@ -599,7 +599,7 @@ export const LESSONS: LessonObjective[] = [
   {
     id: 'level-18',
     title: '18. Remote Tracking & Synchronization',
-    tier: 4 as any,
+    tier: 4,
     tierTitle: 'Stage 4: Remotes & Recovery',
     category: 'Remotes',
     difficulty: 'Advanced',
@@ -641,39 +641,64 @@ export const LESSONS: LessonObjective[] = [
   {
     id: 'level-19',
     title: '19. Merge Conflict Resolution Studio',
-    tier: 4 as any,
+    tier: 4,
     tierTitle: 'Stage 4: Remotes & Recovery',
     category: 'Conflict Mastery',
     difficulty: 'Advanced',
-    description: 'When two developers edit the same line of code, Git pauses and asks you to pick which version to keep.',
-    expectedGoalText: '👉 Click the amber "Conflict in config.ts" button, choose a version, and click [ Mark as Resolved ].',
+    description: 'When two branches edit identical lines, `git merge` halts and prompts you to resolve the collision before finalizing the merge commit.',
+    expectedGoalText: '👉 Type `git merge feature` to trigger the line collision, resolve it in the Conflict Studio, then run `git add config.ts` and `git commit`.',
     initialState: () => {
-      const state = createInitialRepository();
-      state.conflicts['config.ts'] = {
-        path: 'config.ts',
-        base: 'export const PORT = 3000;',
-        ours: 'export const PORT = 8080; // Ours (Main)',
-        theirs: 'export const PORT = 5000; // Theirs (Feature)',
-        isResolved: false,
-      };
-      state.workingTree['config.ts'] = {
-        path: 'config.ts',
-        content: 'export const PORT = 3000;',
-        stage: 'conflicted',
-      };
+      let state = createInitialRepository();
+      // 1. Initial shared ancestor commit with config.ts
+      state = stageFile(state, 'config.ts', 'export const PORT = 3000;\nexport const HOST = "localhost";');
+      state = commit(state, { allowEmpty: true, message: 'Initial server config' }).state;
+
+      // 2. Branch off feature
+      state = createBranch(state, 'feature').state;
+
+      // 3. Make diverged commit on main (changing PORT to 8080)
+      state = stageFile(state, 'config.ts', 'export const PORT = 8080;\nexport const HOST = "localhost";');
+      state = commit(state, { allowEmpty: true, message: 'Update PORT to 8080 on main' }).state;
+
+      // 4. Switch to feature branch and make conflicting commit (changing PORT to 5000)
+      state = switchBranchOrCommit(state, 'feature').state;
+      state = stageFile(state, 'config.ts', 'export const PORT = 5000;\nexport const HOST = "localhost";');
+      state = commit(state, { allowEmpty: true, message: 'Update PORT to 5000 on feature' }).state;
+
+      // 5. Switch back to main ready for the user to trigger the merge
+      state = switchBranchOrCommit(state, 'main').state;
+
       return state;
     },
-    validate: (state: GitRepositoryState) => {
-      return Object.keys(state.conflicts).length === 0 || Object.values(state.conflicts).every((c) => c.isResolved);
+    validate: (state: GitRepositoryState, history: ParsedCommand[]) => {
+      // 1. Must have executed a merge command
+      const hasMerged = history.some((c) => c.command === 'merge');
+      if (!hasMerged) return false;
+
+      // 2. All conflicts must be resolved
+      const noUnresolved =
+        Object.keys(state.conflicts).length === 0 ||
+        Object.values(state.conflicts).every((c) => c.isResolved);
+      if (!noUnresolved) return false;
+
+      // 3. Main branch must contain the converging 2-parent merge commit
+      const headCommit = state.objects[state.refs.heads['main']];
+      return Boolean(
+        headCommit &&
+          headCommit.type === 'commit' &&
+          headCommit.parents &&
+          headCommit.parents.length === 2
+      );
     },
     hints: [
-      'Click the glowing amber conflict badge on screen.',
-      'Select "Accept Current", "Accept Incoming", or "Accept Both", then submit.',
+      'Type `git merge feature` to initiate the merge and trigger the conflict halt.',
+      'Click the glowing amber conflict badge on screen and select which version to keep.',
+      'Run `git add config.ts` and `git commit` to seal the 2-parent merge commit.',
     ],
     pedagogicalTip: 'Conflicts are not errors—they are safety checkpoints where Git asks you to confirm code intent.',
     realWorldContext: 'Merge conflicts happen daily on engineering teams. Resolving them with clear 3-way visual tools prevents accidental code deletion.',
     commonGotcha: 'Leaving conflict markers (`<<<<<<< HEAD`, `=======`, `>>>>>>>`) inside your code files breaks the production build!',
-    recommendedCommands: ['add config.ts', 'commit'],
+    recommendedCommands: ['merge feature', 'add config.ts', 'commit'],
     unlockPanels: {
       terminal: true,
       stagingInspector: true,
@@ -683,7 +708,7 @@ export const LESSONS: LessonObjective[] = [
   {
     id: 'level-20',
     title: '20. Interactive Rebase Studio (`rebase -i`)',
-    tier: 4 as any,
+    tier: 4,
     tierTitle: 'Stage 4: Remotes & Recovery',
     category: 'History Rewriting',
     difficulty: 'Advanced',
@@ -691,9 +716,9 @@ export const LESSONS: LessonObjective[] = [
     expectedGoalText: '👉 Type `git rebase -i HEAD~3` (or open Rebase Studio), select "squash" for typo commits, and apply.',
     initialState: () => {
       let state = createInitialRepository();
-      state = commit(state, { message: 'feat: add user profile page' }).state;
-      state = commit(state, { message: 'fix typo in header' }).state;
-      state = commit(state, { message: 'fix another css typo' }).state;
+      state = commit(state, { allowEmpty: true, message: 'feat: add user profile page' }).state;
+      state = commit(state, { allowEmpty: true, message: 'fix typo in header' }).state;
+      state = commit(state, { allowEmpty: true, message: 'fix another css typo' }).state;
       return state;
     },
     validate: (state: GitRepositoryState) => {
@@ -717,7 +742,7 @@ export const LESSONS: LessonObjective[] = [
   {
     id: 'level-21',
     title: '21. Reflog Disaster Recovery',
-    tier: 4 as any,
+    tier: 4,
     tierTitle: 'Stage 4: Remotes & Recovery',
     category: 'Disaster Recovery',
     difficulty: 'Advanced',
@@ -725,11 +750,14 @@ export const LESSONS: LessonObjective[] = [
     expectedGoalText: '👉 Type `git reflog`, find the lost commit hash, and restore it with: `git reset --hard <sha>`',
     initialState: () => {
       let state = createInitialRepository();
-      state = commit(state, { message: 'Important client feature v1' }).state;
-      state = commit(state, { message: 'Important client feature v2 (LOST)' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Important client feature v1' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Important client feature v2 (LOST)' }).state;
       const lostSha = getCurrentCommitId(state)!;
       // Accidentally hard reset back 2 commits
-      const rootSha = Object.keys(state.objects).find((k) => state.objects[k].type === 'commit' && (state.objects[k] as any).parents.length === 0)!;
+      const rootSha = Object.keys(state.objects).find((k) => {
+        const obj = state.objects[k];
+        return obj.type === 'commit' && (obj as GitCommit).parents.length === 0;
+      })!;
       state.refs.heads['main'] = rootSha;
       state.reflog.HEAD.unshift({
         id: 'reflog-reset-accident',
@@ -742,8 +770,8 @@ export const LESSONS: LessonObjective[] = [
       return state;
     },
     validate: (state: GitRepositoryState) => {
-      const currentCommit = state.objects[getCurrentCommitId(state)!] as any;
-      return currentCommit && currentCommit.message.includes('LOST');
+      const currentCommit = state.objects[getCurrentCommitId(state)!];
+      return Boolean(currentCommit && currentCommit.type === 'commit' && currentCommit.message.includes('LOST'));
     },
     hints: [
       'Type `git reflog` to see past commit snapshots.',
@@ -762,7 +790,7 @@ export const LESSONS: LessonObjective[] = [
   {
     id: 'level-22',
     title: '22. Release Tagging (`git tag`)',
-    tier: 4 as any,
+    tier: 4,
     tierTitle: 'Stage 4: Remotes & Recovery',
     category: 'Releases',
     difficulty: 'Advanced',
@@ -770,7 +798,7 @@ export const LESSONS: LessonObjective[] = [
     expectedGoalText: '👉 In the terminal, create a production release tag: `git tag -a v1.0.0`',
     initialState: () => {
       let state = createInitialRepository();
-      state = commit(state, { message: 'Release candidate v1.0' }).state;
+      state = commit(state, { allowEmpty: true, message: 'Release candidate v1.0' }).state;
       return state;
     },
     validate: (state: GitRepositoryState) => {

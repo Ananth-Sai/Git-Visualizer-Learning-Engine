@@ -83,13 +83,27 @@ export const CommandPalette: React.FC = () => {
               <button
                 onClick={() => {
                   setCommandPaletteOpen(false);
-                  setGlossaryOpen(true);
+                  router.push('/help');
                 }}
                 className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl hover:bg-white/10 text-slate-100 transition cursor-pointer border border-transparent hover:border-white/10"
               >
                 <div className="flex items-center gap-2.5">
-                  <BookOpen size={15} className="text-sky-300" />
-                  <span className="font-medium">Open Git Glossary (A–Z Dictionary)</span>
+                  <BookOpen size={15} className="text-emerald-300" />
+                  <span className="font-medium">Git Help &amp; Living Cheat Sheet</span>
+                </div>
+                <ArrowRight size={13} className="text-slate-400" />
+              </button>
+
+              <button
+                onClick={() => {
+                  setCommandPaletteOpen(false);
+                  router.push('/explorer');
+                }}
+                className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl hover:bg-white/10 text-slate-100 transition cursor-pointer border border-transparent hover:border-white/10"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Search size={15} className="text-sky-300" />
+                  <span className="font-medium">Command Explorer &amp; Lab</span>
                 </div>
                 <ArrowRight size={13} className="text-slate-400" />
               </button>

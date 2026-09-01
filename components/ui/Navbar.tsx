@@ -15,6 +15,7 @@ import {
   Search,
   Sparkles,
   Terminal,
+  HelpCircle,
 } from 'lucide-react';
 import { useAppStore } from '../../core/engine/StateManager';
 import { ThemeSelector } from './ThemeSelector';
@@ -52,6 +53,7 @@ export const Navbar: React.FC = () => {
     { href: '/curriculum', label: 'Practice Levels', icon: GitBranch },
     { href: '/playground', label: 'Sandbox', icon: Terminal },
     { href: '/explorer', label: 'Command Explorer', icon: BookOpen },
+    { href: '/help', label: 'Help', icon: HelpCircle },
   ];
 
   return (

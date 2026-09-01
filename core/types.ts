@@ -29,6 +29,8 @@ export interface GitCommit {
   branchTag?: string; // Optional branch tag metadata
 }
 
+export type GitObject = GitBlob | GitTree | GitCommit;
+
 export interface DiffHunk {
   id: string;
   header: string; // e.g. '@@ -1,4 +1,6 @@'
@@ -143,7 +145,7 @@ export interface LessonObjective {
   id: string;
   title: string;
   description: string;
-  tier: 1 | 2 | 3;
+  tier: 1 | 2 | 3 | 4;
   tierTitle: string;
   category: string;
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';

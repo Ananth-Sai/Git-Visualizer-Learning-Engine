@@ -6,6 +6,7 @@ import {
   UnlockedPanels,
   ParsedCommand,
   RecipeScenario,
+  GitCommit,
 } from '../types';
 import {
   createInitialRepository,
@@ -18,6 +19,12 @@ import {
   stageFile as stageAction,
   stashPush as stashPushAction,
   stashPop as stashPopAction,
+  getCurrentCommitId,
+  getCommitFiles,
+  cherryPick as cherryPickAction,
+  revertCommit as revertAction,
+  fetchRemote as fetchAction,
+  pushRemote as pushAction,
 } from './GitReducer';
 import { LESSONS } from '../curriculum/lessons';
 import { parseGitCommand } from '../parser/CommandParser';
@@ -250,10 +257,60 @@ export const useAppStore = create<AppState>((set, get) => ({
         outputText = 'Reinitialized existing Git repository in /workspace/.git/';
         break;
 
+      case 'echo': {
+        const [content, filePath] = cmd.args;
+        if (!filePath) {
+          outputText = content || '';
+        } else {
+          const cleanContent = content ? content.replace(/^['"]|['"]$/g, '') : '';
+          nextRepo = {
+            ...repo,
+            workingTree: {
+              ...repo.workingTree,
+              [filePath]: {
+                path: filePath,
+                content: cleanContent,
+                stage: repo.workingTree[filePath] ? 'modified' : 'untracked',
+              },
+            },
+          };
+          outputText = `Updated '${filePath}' in working directory.`;
+        }
+        break;
+      }
+
+      case 'touch': {
+        const filePath = cmd.args[0] || 'file.txt';
+        nextRepo = {
+          ...repo,
+          workingTree: {
+            ...repo.workingTree,
+            [filePath]: {
+              path: filePath,
+              content: repo.workingTree[filePath]?.content || '',
+              stage: repo.workingTree[filePath] ? repo.workingTree[filePath].stage : 'untracked',
+            },
+          },
+        };
+        outputText = `Created file '${filePath}'.`;
+        break;
+      }
+
       case 'commit': {
-        const msg = (cmd.flags['m'] as string) || (cmd.flags['message'] as string) || 'Update';
+        let currentRepo = repo;
+        const msg = (typeof cmd.flags['m'] === 'string' ? cmd.flags['m'] : typeof cmd.flags['message'] === 'string' ? cmd.flags['message'] : 'Update files');
         const amend = !!cmd.flags['amend'];
-        const res = commitAction(repo, { message: msg, amend });
+        const autoStage = !!cmd.flags['a'] || !!cmd.flags['all'];
+
+        if (autoStage) {
+          for (const [path, file] of Object.entries(currentRepo.workingTree)) {
+            if (file.stage === 'modified') {
+              currentRepo = stageAction(currentRepo, path);
+            }
+          }
+        }
+
+        const res = commitAction(currentRepo, { message: msg, amend });
         if (res.error) {
           isError = true;
           outputText = res.error;
@@ -311,16 +368,14 @@ export const useAppStore = create<AppState>((set, get) => ({
           isError = true;
           outputText = 'fatal: specify a commit SHA to cherry-pick';
         } else {
-          const targetObj = Object.values(repo.objects).find(
-            (o) => o.type === 'commit' && o.id.startsWith(targetSha)
-          ) as any;
-          if (!targetObj) {
+          const res = cherryPickAction(repo, targetSha);
+          if (res.error) {
             isError = true;
-            outputText = `fatal: bad revision '${targetSha}'`;
+            outputText = res.error;
           } else {
-            const res = commitAction(repo, { message: `Cherry-picked: ${targetObj.message || 'commit'}` });
             nextRepo = res.state;
-            outputText = `[${nextRepo.head.target} ${res.commitId}] Cherry-picked: ${targetObj.message}`;
+            const newCommit = nextRepo.objects[res.commitId!] as GitCommit;
+            outputText = `[${nextRepo.head.target} ${res.commitId?.slice(0, 7)}] ${newCommit?.message}`;
             soundFx.playCommitClick();
           }
         }
@@ -333,16 +388,14 @@ export const useAppStore = create<AppState>((set, get) => ({
           isError = true;
           outputText = 'fatal: specify a commit SHA to revert';
         } else {
-          const targetObj = Object.values(repo.objects).find(
-            (o) => o.type === 'commit' && o.id.startsWith(targetSha)
-          ) as any;
-          if (!targetObj) {
+          const res = revertAction(repo, targetSha);
+          if (res.error) {
             isError = true;
-            outputText = `fatal: bad revision '${targetSha}'`;
+            outputText = res.error;
           } else {
-            const res = commitAction(repo, { message: `Revert "${targetObj.message || 'commit'}"` });
             nextRepo = res.state;
-            outputText = `[${nextRepo.head.target} ${res.commitId}] Revert "${targetObj.message}"`;
+            const newCommit = nextRepo.objects[res.commitId!] as GitCommit;
+            outputText = `[${nextRepo.head.target} ${res.commitId?.slice(0, 7)}] ${newCommit?.message}`;
             soundFx.playCommitClick();
           }
         }
@@ -405,12 +458,21 @@ export const useAppStore = create<AppState>((set, get) => ({
           if (res.error) {
             isError = true;
             outputText = res.error;
+          } else if (res.type === 'conflict') {
+            nextRepo = res.state;
+            const conflictFiles = Object.keys(res.state.conflicts || {}).join(', ');
+            outputText = `Auto-merging ${conflictFiles}\nCONFLICT (content): Merge conflict in ${conflictFiles}\nAutomatic merge failed; fix conflicts and then commit the result.`;
+            set({ isConflictModalOpen: true });
+            soundFx.playWarningBuzz();
+          } else if (res.type === 'fast-forward') {
+            nextRepo = res.state;
+            outputText = `Updating ${repo.refs.heads[repo.head.target]?.slice(0, 7)}..${res.state.refs.heads[repo.head.target]?.slice(0, 7)}\nFast-forward`;
+            soundFx.playBranchChime();
+          } else if (res.type === 'already-up-to-date') {
+            outputText = 'Already up to date.';
           } else {
             nextRepo = res.state;
-            outputText =
-              res.type === 'fast-forward'
-                ? `Updating ${repo.refs.heads[repo.head.target]?.slice(0, 7)}..${res.state.refs.heads[repo.head.target]?.slice(0, 7)}\nFast-forward`
-                : `Merge made by the 'recursive' strategy.`;
+            outputText = `Merge made by the 'recursive' strategy.`;
             soundFx.playBranchChime();
           }
         }
@@ -469,12 +531,49 @@ export const useAppStore = create<AppState>((set, get) => ({
 
       case 'restore': {
         const target = cmd.args[0];
+        if (!target) {
+          isError = true;
+          outputText = 'fatal: you must specify a path to restore';
+          break;
+        }
         if (cmd.flags['staged']) {
+          const headFiles = getCommitFiles(nextRepo, getCurrentCommitId(nextRepo));
           const stagedArea = { ...nextRepo.stagingArea };
-          delete stagedArea[target];
-          nextRepo.stagingArea = stagedArea;
+          if (headFiles[target] !== undefined) {
+            const blobId = Object.entries(nextRepo.objects).find(
+              ([, obj]) => obj.type === 'blob' && obj.content === headFiles[target]
+            )?.[0];
+            if (blobId) stagedArea[target] = blobId;
+            else delete stagedArea[target];
+          } else {
+            delete stagedArea[target];
+          }
+          const file = nextRepo.workingTree[target];
+          nextRepo = {
+            ...nextRepo,
+            stagingArea: stagedArea,
+            workingTree: {
+              ...nextRepo.workingTree,
+              ...(file ? { [target]: { ...file, stage: file.content === headFiles[target] ? 'committed' as const : 'modified' as const, stagedContent: headFiles[target] } } : {}),
+            },
+          };
           outputText = `Unstaged changes for '${target}'.`;
         } else {
+          const headFiles = getCommitFiles(nextRepo, getCurrentCommitId(nextRepo));
+          const headContent = headFiles[target];
+          if (headContent === undefined) {
+            const wt = { ...nextRepo.workingTree };
+            delete wt[target];
+            nextRepo = { ...nextRepo, workingTree: wt };
+          } else {
+            nextRepo = {
+              ...nextRepo,
+              workingTree: {
+                ...nextRepo.workingTree,
+                [target]: { path: target, content: headContent, stage: 'committed' },
+              },
+            };
+          }
           outputText = `Restored '${target}' in working tree.`;
         }
         break;
@@ -507,47 +606,105 @@ export const useAppStore = create<AppState>((set, get) => ({
 
       case 'status': {
         const branch = repo.head.type === 'branch' ? `On branch ${repo.head.target}` : `HEAD detached at ${repo.head.target}`;
-        const staged = Object.keys(nextRepo.stagingArea);
-        const modified = Object.entries(nextRepo.workingTree).filter(([_, f]) => f.stage === 'modified');
-        const untracked = Object.entries(nextRepo.workingTree).filter(([_, f]) => f.stage === 'untracked');
+        const headFiles = getCommitFiles(nextRepo, getCurrentCommitId(nextRepo));
+        const indexFiles: Record<string, string> = {};
+        for (const [path, blobId] of Object.entries(nextRepo.stagingArea)) {
+          const blob = nextRepo.objects[blobId];
+          if (blob?.type === 'blob') indexFiles[path] = blob.content;
+        }
+        const paths = new Set([...Object.keys(headFiles), ...Object.keys(indexFiles), ...Object.keys(nextRepo.workingTree)]);
+        const staged: string[] = [];
+        const modified: string[] = [];
+        const untracked: string[] = [];
+        for (const path of paths) {
+          const head = headFiles[path];
+          const index = indexFiles[path];
+          const worktree = nextRepo.workingTree[path]?.content;
+          const inHead = head !== undefined;
+          const inIndex = index !== undefined;
+          const inWorktree = worktree !== undefined;
+          if (!inHead && inWorktree && !inIndex) { untracked.push(path); continue; }
+          if (head !== index) staged.push(path);
+          if (index !== worktree && inWorktree) modified.push(path);
+          if (inHead && !inWorktree && inIndex) modified.push(path);
+        }
 
         let statusText = `${branch}\n`;
-        if (staged.length > 0) {
-          statusText += '\nChanges to be committed:\n' + staged.map((p) => `  \x1b[32mnew file:   ${p}\x1b[0m`).join('\n');
-        }
-        if (modified.length > 0) {
-          statusText += '\nChanges not staged for commit:\n' + modified.map(([p]) => `  \x1b[31mmodified:   ${p}\x1b[0m`).join('\n');
-        }
-        if (untracked.length > 0) {
-          statusText += '\nUntracked files:\n' + untracked.map(([p]) => `  \x1b[31m${p}\x1b[0m`).join('\n');
-        }
-        if (staged.length === 0 && modified.length === 0 && untracked.length === 0) {
-          statusText += 'nothing to commit, working tree clean';
-        }
+        if (staged.length > 0) statusText += '\nChanges to be committed:\n' + staged.map((p) => `  \x1b[32m${headFiles[p] === undefined ? 'new file' : indexFiles[p] === undefined ? 'deleted' : 'modified'}:   ${p}\x1b[0m`).join('\n');
+        if (modified.length > 0) statusText += '\nChanges not staged for commit:\n' + modified.map((p) => `  \x1b[31m${headFiles[p] !== undefined && !nextRepo.workingTree[p] ? 'deleted' : 'modified'}:   ${p}\x1b[0m`).join('\n');
+        if (untracked.length > 0) statusText += '\nUntracked files:\n' + untracked.map((p) => `  \x1b[31m${p}\x1b[0m`).join('\n');
+        if (staged.length === 0 && modified.length === 0 && untracked.length === 0) statusText += 'nothing to commit, working tree clean';
         outputText = statusText;
         break;
       }
 
       case 'log': {
-        const commits = Object.values(repo.objects).filter((o) => o.type === 'commit') as any[];
+        const commits = Object.values(repo.objects).filter((o): o is GitCommit => o.type === 'commit');
         outputText = commits
           .map((c) => `commit ${c.id}\nAuthor: ${c.author.name} <${c.author.email}>\nDate:   ${new Date(c.author.timestamp).toLocaleString()}\n\n    ${c.message}\n`)
           .join('\n');
         break;
       }
 
-      case 'fetch': {
-        outputText = 'From github.com/developer/project\n * [new branch]      main       -> origin/main';
+      case 'show': {
+        const targetSha = cmd.args[0] || getCurrentCommitId(repo);
+        if (!targetSha) {
+          isError = true;
+          outputText = "fatal: bad default revision 'HEAD'";
+        } else {
+          const targetObj = Object.values(repo.objects).find(
+            (o): o is GitCommit => o.type === 'commit' && o.id.startsWith(targetSha)
+          );
+          if (!targetObj) {
+            isError = true;
+            outputText = `fatal: bad revision '${targetSha}'`;
+          } else {
+            const files = getCommitFiles(repo, targetObj.id);
+            const fileDiffs = Object.entries(files)
+              .map(
+                ([p, content]) =>
+                  `diff --git a/${p} b/${p}\n--- /dev/null\n+++ b/${p}\n${content
+                    .split('\n')
+                    .map((l) => `+ ${l}`)
+                    .join('\n')}`
+              )
+              .join('\n\n');
+            outputText = `commit ${targetObj.id}\nAuthor: ${targetObj.author.name} <${targetObj.author.email}>\nDate:   ${new Date(targetObj.author.timestamp).toLocaleString()}\n\n    ${targetObj.message}\n\n${fileDiffs}`;
+          }
+        }
         break;
       }
 
-      case 'pull': {
-        outputText = 'Already up to date.';
+      case 'fetch': {
+        const remoteName = cmd.args[0] || 'origin';
+        const res = fetchAction(repo, remoteName);
+        nextRepo = res.state;
+        outputText = res.output;
         break;
       }
 
       case 'push': {
-        outputText = 'Everything up-to-date';
+        const remoteName = cmd.args[0] || 'origin';
+        const branchName = cmd.args[1];
+        const res = pushAction(repo, remoteName, branchName);
+        nextRepo = res.state;
+        outputText = res.output;
+        break;
+      }
+
+      case 'pull': {
+        const remoteName = cmd.args[0] || 'origin';
+        const fetchRes = fetchAction(repo, remoteName);
+        const remoteBranch = `${remoteName}/main`;
+        if (fetchRes.state.refs.remotes[remoteName]?.['main'] === getCurrentCommitId(repo)) {
+          nextRepo = fetchRes.state;
+          outputText = 'Already up to date.';
+        } else {
+          const mergeRes = mergeAction(fetchRes.state, remoteBranch);
+          nextRepo = mergeRes.state;
+          outputText = `Updating ${getCurrentCommitId(repo)?.slice(0, 7)}..${getCurrentCommitId(nextRepo)?.slice(0, 7)}\nFast-forward\n 1 file changed, 1 insertion(+)`;
+          soundFx.playSuccessFanfare();
+        }
         break;
       }
 

@@ -1,16 +1,21 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Wrench, ArrowRight, CheckCircle2, Play } from 'lucide-react';
 import { RECIPE_SCENARIOS } from '../../core/curriculum/scenarios';
 import { useAppStore } from '../../core/engine/StateManager';
 
 export const RecipeScenarios: React.FC = () => {
   const { setRepo, selectRecipe, activeRecipeId } = useAppStore();
+  const router = useRouter();
 
   const handleLaunchRecipe = (recipe: any) => {
+    // Load the recipe's initial git state into the global store
     setRepo(recipe.initialState());
     selectRecipe(recipe.id);
+    // Navigate to the sandbox so the user can interact with it
+    router.push('/playground');
   };
 
   return (
