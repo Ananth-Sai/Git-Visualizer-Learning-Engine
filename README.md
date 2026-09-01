@@ -156,9 +156,21 @@ npm run start
 
 ---
 
+## 🤖 AI Coach Architecture & Rate-Limiting Design
+
+Fluid Git's AI Coach is engineered to be resilient, educational, and cost-effective:
+
+* **Multi-Model Fallback Chain:** Google Gemini requests cascade dynamically across available models (`gemini-3.7-flash` ➔ `gemini-3.6-flash` ➔ `gemini-3.5-flash` ➔ `gemini-2.5-flash`) to prevent 503 service degradations.
+* **BYOK Support:** Users can provide their own OpenAI (`gpt-4o-mini`), Anthropic (`claude-3-5-sonnet`), or Gemini keys via the Settings Modal. BYOK requests bypass shared rate limits and are sent with encrypted client-side headers.
+* **In-Memory Sliding-Window Limiter:** The default free tier enforces an IP-based sliding window limit (10 requests/minute). 
+  > **Serverless Note:** Under distributed serverless environments (e.g. Vercel Edge/Serverless Lambdas), this in-memory Map operates on a per-instance basis as a soft protective guard. If enterprise-scale global synchronization is needed, it can be paired with an Upstash Redis/KV store.
+* **100% Offline Local Fallbacks:** If API rate limits are hit or the user is offline, the coach gracefully returns context-aware deterministic heuristics based on the active lesson objective and error message, guaranteeing the app never crashes or becomes unusable without network access.
+
+---
+
 ## 🔒 Security & Privacy Notice
 
-* **Zero Secret Logging:** Your API keys (Gemini, OpenAI, Anthropic) are stored strictly in client-side `localStorage` and sent over HTTPS only when interacting with the AI Coach.
+* **Zero Secret Logging:** Your API keys (Gemini, OpenAI, Anthropic) are stored strictly in client-side `localStorage` and sent directly over HTTPS only when interacting with the AI Coach.
 * **Fallback Guarantee:** The entire simulation, learning tracks, canvas animations, and command parsers function **100% offline** without requiring any API keys or network connection.
 
 ---
