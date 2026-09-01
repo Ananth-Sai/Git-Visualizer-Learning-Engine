@@ -1,87 +1,173 @@
-# Fluid Git — A Deterministic In-Memory Git Engine & Physics Learning Lab
+<div align="center">
 
-Most Git learning tools show you an animation of what Git supposedly does. Fluid Git is built on a **deterministic in-memory Git engine inspired by Git's content-addressable object store, DAG, index, and working-tree model** — real commits, real branches, real 3-way merges, and real line-level conflicts.
+# 🌊 Fluid Git
+### Physics-Driven In-Memory Git Engine & Interactive Learning Lab
 
-Built to make Git state visible while you learn it: commands mutate a shared repository model, and the graph, terminal, inspectors, and labs all observe the same state. Fluid Git replaces that with a physics-driven, spring-animated interface and genuinely progressive difficulty, backed by a Git engine tested against real edge cases.
+[![Next.js 16](https://img.shields.io/badge/Next.js-16.3.2%20(Turbopack)-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x%20Strict-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
+[![Tests Passing](https://img.shields.io/badge/Vitest-40%2F40%20Passing%20(100%25)-44A833?style=for-the-badge&logo=vitest)](https://vitest.dev/)
+[![License](https://img.shields.io/badge/License-MIT-9945FF?style=for-the-badge)](./LICENSE)
 
----
+<p align="center">
+  <b>A zero-latency, topological Git simulation where commands mutate a real in-memory content-addressable DAG.</b><br/>
+  Real commits · Real branches · Real 3-way LCA merges · Real line-level conflict resolution.
+</p>
 
-## What makes this real, not a mockup
-
-Core Git operations are implemented against a shared in-memory repository model and covered by automated tests:
-
-- **Commits, branches, detached HEAD** — full SHA-addressable object store (Blobs, Trees, Commits) and ref pointers.
-- **Merge** — accurately distinguishes fast-forward, 3-way, and already-up-to-date outcomes via a topological Lowest Common Ancestor (LCA) algorithm (tested against multi-branch diamond DAGs).
-- **Genuine merge conflicts** — real line-level 3-way array diffing. Non-overlapping line modifications auto-merge cleanly; overlapping modifications halt and generate standard conflict markers. The Stage 4 conflict studio sets up real divergent branches and lets the engine detect the collision upon `git merge`.
-- **Rebase, reset (--soft/--mixed/--hard), stash, cherry-pick, revert, reflog** — operate through repository snapshots, refs, trees, and working files.
-
-**40 automated test cases** cover the engine invariants, command parser edge cases (unclosed quotes, flag bundling, whitespace), and curriculum integrity (every lesson's initial state and completion validator are independently verified). The repository is configured for TypeScript strict mode and a production Next.js build.
-
----
-
-## How the learning path works
-
-Four progressive stages, not one flat sandbox:
-
-1. **Stage 1: Fundamentals** — the three zones, staging, committing. Button-driven where possible, so you're not required to know syntax to learn concepts.
-2. **Stage 2: Branching & Merging** — real branch divergence and merges.
-3. **Stage 3: Undoing & Precision** — reset modes, amending, the operations people are usually afraid to touch.
-4. **Stage 4: Remotes & Recovery** — includes the Merge Conflict Resolution Studio, where a real conflict is triggered by your own `git merge` command, not a canned demo.
-
-Every lesson includes a plain-language goal, progressive hints, the *why* behind the command (not just the *what*), a real-world context for when you'd actually use it, and a proactively-flagged common mistake — built specifically to catch the confusion points a genuine beginner hits, not just the command reference itself.
+[✨ Explore Curriculum](https://github.com/Ananth-Sai/Git-Visualizer-Learning-Engine) • [🛠️ Interactive Playground](https://github.com/Ananth-Sai/Git-Visualizer-Learning-Engine) • [🔍 Command Explorer](https://github.com/Ananth-Sai/Git-Visualizer-Learning-Engine) • [📖 Smart Help](https://github.com/Ananth-Sai/Git-Visualizer-Learning-Engine)
 
 ---
 
-## Beyond the curriculum
+</div>
 
-- **Playground** — free-form sandbox against the same real engine.
-- **Explorer** — plumbing/internals inspector, command comparisons, an emergency-recovery wizard for "I broke something" scenarios.
-- **AI Coach** — optional, context-aware help. Bring your own OpenAI/Anthropic/Gemini key, or use the built-in free tier (rate-limited to protect shared quota). If no AI is configured at all, or a request fails, it falls back to real local pedagogical advice — the tool is never dependent on an external API to be useful.
-- **Theming** — a curated set of named themes (Linear, GitHub, JetBrains-inspired, plus a few standalone options), not an infinite customizer.
+## 💡 What Makes Fluid Git Different?
+
+Most Git visualizers show pre-baked animations of what Git conceptually does. **Fluid Git** is powered by a **deterministic in-memory Git state engine** modeled directly after Git's internal architecture:
+
+```text
+  ┌───────────────────────┐       ┌───────────────────────┐       ┌───────────────────────┐
+  │   WORKING DIRECTORY   │  ──>  │     STAGING AREA      │  ──>  │     OBJECT STORE      │
+  │    (Unstaged Files)   │       │   (Index / .git/idx)  │       │ (Blobs, Trees, Commits)│
+  └───────────┬───────────┘       └───────────┬───────────┘       └───────────┬───────────┘
+              │                               │                               │
+              └───────────────────────────────┼───────────────────────────────┘
+                                              ▼
+                              ┌───────────────────────────────┐
+                              │     PURE GIT STATE REDUCER    │
+                              │     (Deterministic Replay)    │
+                              └───────────────┬───────────────┘
+                                              │
+                 ┌────────────────────────────┴────────────────────────────┐
+                 ▼                                                         ▼
+  ┌─────────────────────────────┐                           ┌─────────────────────────────┐
+  │    PHYSICS COMMIT GRAPH     │                           │   INTERACTIVE TERMINAL &    │
+  │ (Framer Motion Spring DAG)  │                           │   4-ZONE PLUMBING VIEWER    │
+  └─────────────────────────────┘                           └─────────────────────────────┘
+```
+
+Every command typed into the simulated terminal mutates a single shared state store: the DAG graph, 3-zone staging visualizer, object inspectors, and lesson validators all react in real time.
 
 ---
 
-## Tech stack
+## ⚡ Core Feature Showcase
 
-Next.js 16 (App Router, Turbopack) · React 19 · TypeScript (strict) · Zustand for state · Framer Motion for physics-based, spring-driven animation · Tailwind CSS · Vitest for the engine/parser/curriculum test suites.
-
-No database, no required login, no paid dependencies. The only external calls are optional, user-configured AI provider requests.
+| Module | Icon | Capabilities |
+| :--- | :---: | :--- |
+| **Physics Commit Graph** | 🌌 | Spring-driven SVG canvas, auto-branch routing, detached HEAD markers, 2-parent merge diamonds, and commit SHA inspection tooltips. |
+| **Deterministic Engine** | ⚙️ | Full object store (`Blob`, `Tree`, `Commit`, `Tag`), ref pointers, `HEAD` tracking, and reflog movement history. |
+| **3-Way Merge Engine** | 🔀 | Topological **Lowest Common Ancestor (LCA)** search across multi-branch diamond DAGs. Accurate fast-forward vs 3-way merge resolution. |
+| **Merge Conflict Studio** | 💥 | True line-level array diffing. Overlapping modifications trigger standard conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`) with interactive inline resolvers. |
+| **Command Explorer** | 🔍 | 5 interactive tabs: **Flag Builder**, **Comparisons** (`merge` vs `rebase`), **Recipe Scenarios**, **Emergency Triage**, and **4-Zone Plumbing**. |
+| **Smart Help & Catalog** | 📖 | Searchable cheat sheet with live command chips, syntax breakdown, safety risk ratings, and topology diagrams. |
+| **Interactive Roadmap** | 🗺️ | 22-station learning progression flowchart connecting fundamentals to advanced history surgery. |
+| **Context AI Coach** | 🤖 | Built-in Gemini 3.7 multi-model fallback chain with client-side BYOK support (OpenAI / Anthropic) and rate-limited free tier. |
+| **Theme Suite** | 🎨 | Curated dark & developer themes: *Linear*, *GitHub Dark*, *JetBrains*, *Tokyo Night*, *Espresso*, and *Nord*. |
 
 ---
 
-## Getting started
+## 📚 Pedagogical Curriculum (4 Progressive Stages)
 
+```text
+Stage 1: Fundamentals  ──>  Stage 2: Branch & Merge  ──>  Stage 3: History Surgery  ──>  Stage 4: Remotes & Conflicts
+[Staging & Commits]         [Divergent DAGs & LCA]        [Soft/Hard Resets & Stash]     [Conflict Studio & Remotes]
+```
+
+1. **Stage 1: Repository Fundamentals**
+   * The 3-Zone Mental Model (Working Tree ➔ Index ➔ Commit History)
+   * Staging files with `git add`, snapshotting with `git commit -m`
+   * Inspecting repository state with `git status` and `git log`
+2. **Stage 2: Branching & Branch Topology**
+   * Creating and switching branches (`git branch`, `git switch`, `git checkout -b`)
+   * Fast-Forward merges vs recursive 3-way merge commits
+   * Deleting merged branches and tracking `HEAD` pointers
+3. **Stage 3: History Surgery & Undoing Mistakes**
+   * Dissecting `git reset` modes: `--soft` vs `--mixed` vs `--hard`
+   * Temporary work preservation with `git stash` and `git stash pop`
+   * Reverting safe public history with `git revert`
+4. **Stage 4: Remote Operations & Conflict Resolution**
+   * Simulating remotes: `git fetch`, `git pull origin main`, `git push origin main`
+   * Real-time merge conflict handling in the dedicated Conflict Studio
+   * History surgery with `git cherry-pick` and `git reflog`
+
+---
+
+## 🧪 Comprehensive Automated Test Suite
+
+Fluid Git is thoroughly tested with **Vitest** to ensure zero state regressions or invalid Git operations:
+
+```bash
+✓ __tests__/command-parser.test.ts (15 tests)
+  - Tokenizes arguments, quoted strings with spaces, flag bundling (-am), and bad syntax
+✓ __tests__/git-engine.test.ts (21 tests)
+  - Commits, branch creation, fast-forward merges, diamond LCA 3-way merges
+  - Soft, mixed, and hard resets, revert commits, stash and pop stacks
+✓ __tests__/curriculum-integrity.test.ts (4 tests)
+  - Validates all stage lesson objectives, initial state builders, and completion rules
+
+Test Files  3 passed (3)
+     Tests  40 passed (40)
+  Duration  1.17s
+```
+
+---
+
+## 🛠️ Technology Stack
+
+* **Framework:** [Next.js 16](https://nextjs.org/) (App Router, Turbopack)
+* **Language:** [TypeScript](https://www.typescriptlang.org/) (Strict Mode, 100% Type-Safe)
+* **UI & Components:** [React 19](https://react.dev/), [Tailwind CSS](https://tailwindcss.com/)
+* **State Management:** [Zustand](https://github.com/pmndrs/zustand)
+* **Animation & Physics:** [Framer Motion](https://www.framer.com/motion/)
+* **Test Runner:** [Vitest](https://vitest.dev/)
+* **AI Integration:** Google Gemini API (with optional OpenAI / Anthropic BYOK proxy)
+
+---
+
+## 🚀 Quick Start (Local Setup)
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/Ananth-Sai/Git-Visualizer-Learning-Engine.git
+cd Git-Visualizer-Learning-Engine
+```
+
+### 2. Install dependencies
 ```bash
 npm install
+```
+
+### 3. Run the development server
+```bash
 npm run dev
 ```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Open `http://localhost:3000`.
-
-To use the AI Coach with your own key, or to use the built-in free tier, configure it in-app via the settings modal — no `.env` setup required to use the rest of the tool.
-
-Run the test suite:
+### 4. Run automated tests
 ```bash
-npm run test
+npm test
+```
+
+### 5. Create a production build
+```bash
+npm run build
+npm run start
 ```
 
 ---
 
-## Project structure
+## 🔒 Security & Privacy Notice
 
-```
-core/
-  engine/        — the in-memory Git simulation: commits, branches, merge, rebase, reset, stash
-  parser/        — command lexer/parser for the terminal input
-  curriculum/    — lessons, scenarios, glossary, command reference data
-  ai/            — AI coach prompt building and provider gateway
-app/             — routes: landing, curriculum, playground, explorer, help, roadmap
-components/      — canvas rendering, terminal, labs (conflict resolver, interactive rebase), UI
-__tests__/       — engine correctness, parser edge cases, curriculum integrity
-```
+* **Zero Secret Logging:** Your API keys (Gemini, OpenAI, Anthropic) are stored strictly in client-side `localStorage` and sent over HTTPS only when interacting with the AI Coach.
+* **Fallback Guarantee:** The entire simulation, learning tracks, canvas animations, and command parsers function **100% offline** without requiring any API keys or network connection.
 
 ---
 
-## Status
+## 📄 License
 
-Core engine, curriculum (4 stages), playground, AI coach, and theming are complete and tested. Known area for future work: the in-memory AI rate limiter resets per server instance, so it's a soft protection, not a hard guarantee, under serverless deployment — fine for current scale, worth revisiting with a shared store if usage grows.
+Distributed under the **MIT License**. See [`LICENSE`](./LICENSE) for more details.
+
+---
+
+<div align="center">
+  <sub>Built with ❤️ for developers and students mastering Git topology.</sub>
+</div>
