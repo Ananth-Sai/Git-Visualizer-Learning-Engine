@@ -7,6 +7,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x%20Strict-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
 [![Tests Passing](https://img.shields.io/badge/Vitest-40%2F40%20Passing%20(100%25)-44A833?style=for-the-badge&logo=vitest)](https://vitest.dev/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-git--visualizer--engine.vercel.app-0070F3?style=for-the-badge&logo=vercel)](https://git-visualizer-engine.vercel.app)
 [![License](https://img.shields.io/badge/License-MIT-9945FF?style=for-the-badge)](./LICENSE)
 
 <p align="center">
@@ -14,7 +15,7 @@
   Real commits · Real branches · Real 3-way LCA merges · Real line-level conflict resolution.
 </p>
 
-[✨ Explore Curriculum](https://github.com/Ananth-Sai/Git-Visualizer-Learning-Engine) • [🛠️ Interactive Playground](https://github.com/Ananth-Sai/Git-Visualizer-Learning-Engine) • [🔍 Command Explorer](https://github.com/Ananth-Sai/Git-Visualizer-Learning-Engine) • [📖 Smart Help](https://github.com/Ananth-Sai/Git-Visualizer-Learning-Engine)
+[🚀 Launch Live Web App](https://git-visualizer-engine.vercel.app) • [✨ Explore Curriculum](https://git-visualizer-engine.vercel.app/curriculum) • [🛠️ Interactive Playground](https://git-visualizer-engine.vercel.app/playground) • [🔍 Command Explorer](https://git-visualizer-engine.vercel.app/explorer) • [📖 Smart Help](https://git-visualizer-engine.vercel.app/help)
 
 ---
 
