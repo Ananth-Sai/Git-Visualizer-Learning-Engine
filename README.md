@@ -3,12 +3,12 @@
 # 🌊 Fluid Git
 ### Physics-Driven In-Memory Git Engine & Interactive Learning Lab
 
-[![Next.js 16](https://img.shields.io/badge/Next.js-16.3.2%20(Turbopack)-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x%20Strict-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
-[![Tests Passing](https://img.shields.io/badge/Vitest-40%2F40%20Passing%20(100%25)-44A833?style=for-the-badge&logo=vitest)](https://vitest.dev/)
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-git--visualizer--engine.vercel.app-0070F3?style=for-the-badge&logo=vercel)](https://git-visualizer-engine.vercel.app)
-[![License](https://img.shields.io/badge/License-MIT-9945FF?style=for-the-badge)](./LICENSE)
+[![Next.js 16](https://img.shields.io/badge/Next.js-16.3.2-0070F3?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x%20Strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React 19](https://img.shields.io/badge/React-19.0-61DAFB?logo=react&logoColor=000000)](https://react.dev/)
+[![Tests Passing](https://img.shields.io/badge/Vitest-40%2F40%20Passing-6E9F18?logo=vitest&logoColor=white)](https://vitest.dev/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-0070F3?logo=vercel&logoColor=white)](https://git-visualizer-engine.vercel.app)
+[![License](https://img.shields.io/badge/License-MIT-10B981)](./LICENSE)
 
 <p align="center">
   <b>A zero-latency, topological Git simulation where commands mutate a real in-memory content-addressable DAG.</b><br/>
@@ -20,6 +20,8 @@
 ---
 
 </div>
+
+
 
 ## 💡 What Makes Fluid Git Different?
 
